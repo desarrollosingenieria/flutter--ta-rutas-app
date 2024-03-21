@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tarutas/src/views/pages/home_page.dart';
+import 'package:tarutas/src/views/pages/homePage/home_page.dart';
 
 class TARutas extends StatelessWidget {
   const TARutas({super.key});

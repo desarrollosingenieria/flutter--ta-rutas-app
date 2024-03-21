@@ -6,7 +6,7 @@ part of 'tts_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$appTTSHash() => r'8408e9df5f2cbaa9e2b90f0d6b845df5e8a1c43e';
+String _$appTTSHash() => r'b1b9f300d35197e2bdc53301f92fe8b0bdacba93';
 
 /// See also [AppTTS].
 @ProviderFor(AppTTS)
