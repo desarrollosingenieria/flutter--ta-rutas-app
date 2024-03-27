@@ -3,11 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tarutas/src/data/local/user_preferences.dart';
+import 'package:tarutas/src/provider/card_provider.dart';
 import 'package:tarutas/src/utils/transitions.dart';
 import 'package:tarutas/src/views/pages/editPage/edit_page.dart';
 
 class AddButtonWidget extends ConsumerWidget {
-  const AddButtonWidget({super.key});
+  final int? idParent;
+  const AddButtonWidget({
+    super.key,
+    this.idParent,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -46,6 +51,9 @@ class AddButtonWidget extends ConsumerWidget {
             ),
             onTap: () {
               HapticFeedback.lightImpact();
+              ref.read(cardProvider.notifier).restartCard(idParent: idParent);
+
+              ref.read(cardProvider.notifier).setParentCard(idParent: idParent);
               Navigator.push(
                 context,
                 SlideLeftTransitionRoute(

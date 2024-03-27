@@ -19,17 +19,19 @@ class TACardAdapter extends TypeAdapter<TACard> {
     return TACard(
       name: fields[0] as String,
       text: fields[1] as String,
-      color: fields[2] as Color,
+      color: fields[2] as String,
       img: fields[3] as String?,
       isGroup: fields[4] as bool,
-      cards: (fields[5] as List?)?.cast<TACard>(),
+      parent: fields[6] as int?,
+      children: (fields[7] as List?)?.cast<int>(),
+      id: fields[8] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, TACard obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -40,8 +42,12 @@ class TACardAdapter extends TypeAdapter<TACard> {
       ..write(obj.img)
       ..writeByte(4)
       ..write(obj.isGroup)
-      ..writeByte(5)
-      ..write(obj.cards);
+      ..writeByte(6)
+      ..write(obj.parent)
+      ..writeByte(7)
+      ..write(obj.children)
+      ..writeByte(8)
+      ..write(obj.id);
   }
 
   @override
