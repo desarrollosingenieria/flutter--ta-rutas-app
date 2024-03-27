@@ -13,29 +13,20 @@ class Card extends _$Card {
         color: '0xff9e9e9e',
         isGroup: false,
         parent: null,
+        img: '',
       );
 
   void restartCard({int? idParent}) {
     print('RESTABLECIENDO CARD HIJA DE $idParent');
-    if (idParent != null) {
-      state = state.copyWith(
-        name: '',
-        text: '',
-        color: '0xff9e9e9e',
-        isGroup: false,
-        parent: idParent,
-        img: null,
-      );
-    } else {
-      state = const TACard(
-        id: 0,
-        name: '',
-        text: '',
-        color: '0xff9e9e9e',
-        isGroup: false,
-        parent: null,
-      );
-    }
+    state = TACard(
+      id: 0,
+      name: '',
+      text: '',
+      color: '0xff9e9e9e',
+      isGroup: false,
+      parent: idParent,
+      img: '',
+    );
     print(state.parent);
   }
 
@@ -64,10 +55,8 @@ class Card extends _$Card {
     );
   }
 
-  void setImgCard({required String img}) {
-    state = state.copyWith(
-      img: img,
-    );
+  void setImgCard({String? img}) {
+    state = state.copyWith(img: img);
   }
 
   void isGroupCard({required bool isGroup}) {

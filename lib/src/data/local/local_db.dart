@@ -32,7 +32,7 @@ class LocalData {
   void setCard({required TACard card}) {
     //cardBox!.add(card);
     final int id = cardBox!.values.length;
-    final _taCard = TACard(
+    final taCard = TACard(
       id: cardBox!.values.length,
       name: card.name,
       text: card.text,
@@ -42,10 +42,10 @@ class LocalData {
       parent: card.parent,
       children: card.children,
     );
-    print('CREANDO RUTA $id DENTRO DE ID: ${_taCard.parent}');
-    cardBox!.put(_taCard.id, _taCard);
-    if (_taCard.parent != null) {
-      updateParentCard(idParent: _taCard.parent!, idChild: _taCard.id);
+    print('CREANDO RUTA $id DENTRO DE ID: ${taCard.parent}');
+    cardBox!.put(taCard.id, taCard);
+    if (taCard.parent != null) {
+      updateParentCard(idParent: taCard.parent!, idChild: taCard.id);
     }
   }
 

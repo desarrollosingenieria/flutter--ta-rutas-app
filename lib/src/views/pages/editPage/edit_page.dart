@@ -1,6 +1,7 @@
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:tarutas/src/models/ta_card.dart';
 import 'package:tarutas/src/provider/card_provider.dart';
 import 'package:tarutas/src/provider/config_provider.dart';
@@ -67,22 +68,60 @@ class EditPageState extends ConsumerState<EditPage> {
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.4,
                 height: MediaQuery.of(context).size.width * 0.4,
-                child: ButtonWidget(
-                  card: TACard(
-                    name: taCard.name,
-                    text: taCard.text,
-                    color: taCard.color,
-                    isGroup: taCard.isGroup,
-                    img: taCard.img,
-                    id: taCard.id,
+                child: AbsorbPointer(
+                  child: ButtonWidget(
+                    card: TACard(
+                      name: taCard.name,
+                      text: taCard.text,
+                      color: taCard.color,
+                      isGroup: taCard.isGroup,
+                      img: taCard.img,
+                      id: taCard.id,
+                    ),
                   ),
                 ),
               ),
               SizedBox(
-                height: MediaQuery.of(context).size.width * 0.1,
+                height: MediaQuery.of(context).size.width * 0.04,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton.filled(
+                    onPressed: () {
+                      _pickImageFromCamera();
+                    },
+                    icon: const Icon(Icons.camera_alt),
+                  ),
+                  IconButton.filled(
+                    style: const ButtonStyle(
+                        backgroundColor:
+                            MaterialStatePropertyAll(Colors.orange)),
+                    onPressed: () {
+                      _pickImageFromGallery();
+                    },
+                    icon: const Icon(Icons.folder),
+                  ),
+                  taCard.img != ''
+                      ? IconButton.filled(
+                          style: const ButtonStyle(
+                              backgroundColor:
+                                  MaterialStatePropertyAll(Colors.red)),
+                          onPressed: () {
+                            ref.read(cardProvider.notifier).setImgCard(img: '');
+                          },
+                          icon: const Icon(
+                            Icons.close,
+                          ))
+                      : const SizedBox.shrink(),
+                ],
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.width * 0.04,
               ),
               TextField(
                 controller: titleController,
+                enableInteractiveSelection: false,
                 style: TextStyle(
                   fontSize:
                       MediaQuery.of(context).orientation == Orientation.portrait
@@ -136,6 +175,7 @@ class EditPageState extends ConsumerState<EditPage> {
               ),
               TextField(
                 controller: textController,
+                enableInteractiveSelection: false,
                 style: TextStyle(
                   fontSize:
                       MediaQuery.of(context).orientation == Orientation.portrait
@@ -185,10 +225,19 @@ class EditPageState extends ConsumerState<EditPage> {
                 },
               ),
               SizedBox(
-                height: MediaQuery.of(context).size.width * 0.02,
+                height: MediaQuery.of(context).size.width * 0.04,
               ),
               ListTile(
-                title: const Text('Es un grupo'),
+                title: const Text(
+                  'Es un grupo',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                tileColor: Colors.black12,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                subtitle: const Text(
+                    'Selecciona si quieres agregar más rutas dentro de esta.'),
                 trailing: Switch(
                   thumbIcon: checkIcon,
                   value: taCard.isGroup,
@@ -210,6 +259,21 @@ class EditPageState extends ConsumerState<EditPage> {
                     height: 44,
                     borderRadius: 16,
                     enableShadesSelection: false,
+                    enableOpacity: false,
+                    enableTonalPalette: false,
+                    customColorSwatchesAndNames: {
+                      Colors.red: "Rojo",
+                      Colors.green: "Verde",
+                      Colors.blue: "Azul",
+                      Colors.yellow: "Amarillo",
+                      Colors.pink: "Rosa",
+                      Colors.purple: "Violeta",
+                      Colors.deepPurple: "Violeta oscuro",
+                      Colors.orange: "Anaranjado",
+                      Colors.deepOrange: "Anaranjado oscuro",
+                      Colors.grey: "Gris",
+                    },
+                    elevation: 0,
                     pickersEnabled: const {
                       ColorPickerType.accent: false,
                       ColorPickerType.primary: false,
@@ -218,9 +282,6 @@ class EditPageState extends ConsumerState<EditPage> {
                     },
                   ),
                 ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.width * 0.04,
               ),
               Container(
                 alignment: Alignment.center,
@@ -259,5 +320,23 @@ class EditPageState extends ConsumerState<EditPage> {
         ),
       ),
     );
+  }
+
+  Future _pickImageFromGallery() async {
+    final returnedImage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    if (returnedImage == null) return;
+    ref.read(cardProvider.notifier).setImgCard(img: returnedImage.path);
+    print(returnedImage.path);
+  }
+
+  Future _pickImageFromCamera() async {
+    final returnedImage =
+        await ImagePicker().pickImage(source: ImageSource.camera);
+
+    if (returnedImage == null) return;
+    ref.read(cardProvider.notifier).setImgCard(img: returnedImage.path);
+    print(returnedImage.path);
   }
 }

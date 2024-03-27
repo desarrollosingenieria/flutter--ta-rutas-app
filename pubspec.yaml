@@ -19,6 +19,7 @@ dependencies:
   shared_preferences: ^2.1.0
   url_launcher: ^6.2.4
   flex_color_picker: ^3.4.1
+  image_picker: ^1.0.7
 
 dev_dependencies:
   build_runner: ^2.4.8
