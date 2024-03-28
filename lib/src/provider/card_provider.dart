@@ -14,6 +14,7 @@ class Card extends _$Card {
         isGroup: false,
         parent: null,
         img: '',
+        children: [],
       );
 
   void setCard({required TACard card}) {
@@ -29,6 +30,7 @@ class Card extends _$Card {
       color: '0xff9e9e9e',
       isGroup: false,
       parent: idParent,
+      children: [],
       img: '',
     );
   }

@@ -42,22 +42,45 @@ class LocalData {
     );
     //print('CREANDO RUTA $id DENTRO DE ID: ${taCard.parent}');
     cardBox!.put(taCard.id, taCard);
-    if (taCard.parent != null) {
-      updateParentCard(idParent: taCard.parent!, idChild: taCard.id);
+    if (taCard.parent != null && card.id == 99999) {
+      updateParentCard(
+          idParent: taCard.parent!, idChild: taCard.id, operation: 'add');
     }
   }
 
-  void updateParentCard({required int idParent, required int idChild}) {
+  void updateParentCard(
+      {required int idParent,
+      required int idChild,
+      required String operation}) {
     //print('ACTUALIZANDO RUTA ID: $idParent');
-    final cardParent = cardBox!.getAt(idParent) as TACard;
-    TACard newCardParent =
-        cardParent.copyWith(children: [...cardParent.children ?? [], idChild]);
+    final cardParent = cardBox!.get(idParent) as TACard;
+    TACard newCardParent = cardParent;
+    if (operation == 'add') {
+      newCardParent = cardParent
+          .copyWith(children: [...cardParent.children ?? [], idChild]);
+    } else {
+      newCardParent.children!.remove(idChild);
+    }
     cardBox!.put(idParent, newCardParent);
     //print('RUTA ID $idParent CUENTA CON LAS RUTAS HIJAS: ${newCardParent.children}');
   }
 
   void deleteCard(int id) {
-    cardBox!.getAt(id);
+    final TACard card = cardBox!.get(id);
+    if (card.children!.isNotEmpty && card.children != []) {
+      print('LAS RUTAS HIJAS SON: ${card.children}');
+      // ELIMINAR HIJOS
+      // card.children!.forEach((child) {
+      //   deleteCard(child);
+      // });
+    }
+    if (card.parent != null) {
+      print('ACTUALIZANDO LA RUTA PADRE: ${card.parent}');
+      updateParentCard(
+          idParent: card.parent!, idChild: card.id, operation: 'remove');
+      // ACTUALIZAR PADRE
+    }
+
     cardBox!.delete(id);
   }
 }

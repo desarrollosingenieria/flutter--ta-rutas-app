@@ -28,6 +28,7 @@ class GroupWidget extends ConsumerWidget {
                       .getSavedRoutes()
                       .listenable(),
                   builder: (context, box, _) {
+                    print('HAY ${box.values.length} RUTAS EN EL BOX');
                     List<dynamic> listCards = [];
                     if (idParent != null) {
                       listCards = box.values
