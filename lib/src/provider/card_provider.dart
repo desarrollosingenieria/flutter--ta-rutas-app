@@ -7,7 +7,7 @@ part 'card_provider.g.dart';
 class Card extends _$Card {
   @override
   TACard build() => const TACard(
-        id: 0,
+        id: 99999,
         name: '',
         text: '',
         color: '0xff9e9e9e',
@@ -16,10 +16,14 @@ class Card extends _$Card {
         img: '',
       );
 
+  void setCard({required TACard card}) {
+    state = card;
+  }
+
   void restartCard({int? idParent}) {
-    print('RESTABLECIENDO CARD HIJA DE $idParent');
+    //print('RESTABLECIENDO CARD HIJA DE $idParent');
     state = TACard(
-      id: 0,
+      id: 99999,
       name: '',
       text: '',
       color: '0xff9e9e9e',
@@ -27,11 +31,10 @@ class Card extends _$Card {
       parent: idParent,
       img: '',
     );
-    print(state.parent);
   }
 
   void setParentCard({int? idParent}) {
-    print('SETEANDO PADRE: $idParent');
+    //print('SETEANDO PADRE: $idParent');
     state = state.copyWith(
       parent: idParent,
     );

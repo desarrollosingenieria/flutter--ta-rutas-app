@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tarutas/src/provider/config_provider.dart';
 import 'package:tarutas/src/theme/color_app.dart';
-import 'package:tarutas/src/views/pages/homePage/widgets/group_widget.dart';
+import 'package:tarutas/src/views/pages/groupPage/widgets/group_widget.dart';
 
 class GroupPage extends ConsumerWidget {
   final String? groupName;

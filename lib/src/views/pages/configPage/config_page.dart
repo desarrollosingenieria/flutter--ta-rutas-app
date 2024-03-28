@@ -412,7 +412,7 @@ class ConfigPage extends ConsumerWidget {
                   child: Column(
                     children: [
                       Text(
-                        'Estilo de tarjetas',
+                        'Modo editor',
                         style: TextStyle(
                           fontSize: orientation == Orientation.portrait
                               ? mq.width * appConfig.factorSize
@@ -433,7 +433,7 @@ class ConfigPage extends ConsumerWidget {
                         children: <Widget>[
                           Material(
                             borderRadius: BorderRadius.circular(16),
-                            color: appConfig.cardStyle == 'Solo texto'
+                            color: appConfig.editMode
                                 ? prefs.highContrast
                                     ? Colors.white
                                     : Colors.blue
@@ -444,7 +444,7 @@ class ConfigPage extends ConsumerWidget {
                               onTap: () {
                                 ref
                                     .read(configProvider.notifier)
-                                    .setCardStyle('Solo texto');
+                                    .setEditMode(true);
                               },
                               borderRadius: BorderRadius.circular(16),
                               child: Container(
@@ -456,9 +456,9 @@ class ConfigPage extends ConsumerWidget {
                                 padding: const EdgeInsets.all(20),
                                 alignment: Alignment.center,
                                 child: Text(
-                                  'Solo texto',
+                                  'Habilitado',
                                   style: TextStyle(
-                                    color: appConfig.cardStyle == 'Solo texto'
+                                    color: appConfig.editMode
                                         ? prefs.highContrast
                                             ? Colors.black
                                             : Colors.white
@@ -479,7 +479,7 @@ class ConfigPage extends ConsumerWidget {
                           ),
                           Material(
                             borderRadius: BorderRadius.circular(16),
-                            color: appConfig.cardStyle == 'Texto e Imagen'
+                            color: !appConfig.editMode
                                 ? prefs.highContrast
                                     ? Colors.white
                                     : Colors.blue
@@ -490,7 +490,7 @@ class ConfigPage extends ConsumerWidget {
                               onTap: () {
                                 ref
                                     .read(configProvider.notifier)
-                                    .setCardStyle('Texto e Imagen');
+                                    .setEditMode(false);
                               },
                               borderRadius: BorderRadius.circular(16),
                               child: Container(
@@ -502,56 +502,9 @@ class ConfigPage extends ConsumerWidget {
                                 padding: const EdgeInsets.all(20),
                                 alignment: Alignment.center,
                                 child: Text(
-                                  'Texto e Imagen',
+                                  'Deshabilitado',
                                   style: TextStyle(
-                                    color:
-                                        appConfig.cardStyle == 'Texto e Imagen'
-                                            ? prefs.highContrast
-                                                ? Colors.black
-                                                : Colors.white
-                                            : Colors.white,
-                                    fontSize:
-                                        orientation == Orientation.portrait
-                                            ? mq.width * appConfig.factorSize
-                                            : mq.height * appConfig.factorSize,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: orientation == Orientation.portrait
-                                ? mq.width * 0.02
-                                : mq.height * 0.02,
-                          ),
-                          Material(
-                            borderRadius: BorderRadius.circular(16),
-                            color: appConfig.cardStyle == 'Solo imagen'
-                                ? prefs.highContrast
-                                    ? Colors.white
-                                    : Colors.blue
-                                : prefs.highContrast
-                                    ? Colors.transparent
-                                    : Colors.grey[400],
-                            child: InkWell(
-                              onTap: () {
-                                ref
-                                    .read(configProvider.notifier)
-                                    .setCardStyle('Solo imagen');
-                              },
-                              borderRadius: BorderRadius.circular(16),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(16),
-                                    border: Border.all(
-                                        width: prefs.highContrast ? 2 : 0,
-                                        color: Colors.white)),
-                                padding: const EdgeInsets.all(20),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  'Solo imagen',
-                                  style: TextStyle(
-                                    color: appConfig.cardStyle == 'Solo imagen'
+                                    color: !appConfig.editMode
                                         ? prefs.highContrast
                                             ? Colors.black
                                             : Colors.white
@@ -667,12 +620,12 @@ class ConfigPage extends ConsumerWidget {
                                 child: Text(
                                   'Predeterminado',
                                   style: TextStyle(
-                                    color: appConfig.factorText ==
-                                            'predeterminado'
-                                        ? prefs.highContrast
-                                            ? Colors.black
-                                            : Colors.white
-                                        : Colors.white,
+                                    color:
+                                        appConfig.factorText == 'predeterminado'
+                                            ? prefs.highContrast
+                                                ? Colors.black
+                                                : Colors.white
+                                            : Colors.white,
                                     fontSize:
                                         orientation == Orientation.portrait
                                             ? mq.width * appConfig.factorSize

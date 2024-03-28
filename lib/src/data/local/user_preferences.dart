@@ -44,20 +44,20 @@ class UserPreferences {
 
   // GET y SET de factorSize
   double get factorSize {
-    return _prefs.getDouble('factorSize') ?? 0.04;
+    return _prefs.getDouble('factorSize') ?? 0.054;
   }
 
   set factorSize(double factor) {
     _prefs.setDouble('factorSize', factor);
   }
 
-  // GET y SET de cardStyle
-  String get cardStyle {
-    return _prefs.getString('cardStyle') ?? 'Texto e Imagen';
+  // GET y SET de editMode
+  bool get editMode {
+    return _prefs.getBool('editMode') ?? false;
   }
 
-  set cardStyle(String style) {
-    _prefs.setString('cardStyle', style);
+  set editMode(bool mode) {
+    _prefs.setBool('editMode', mode);
   }
 
   // GET y SET de factorSize
@@ -78,7 +78,7 @@ class UserPreferences {
     _prefs.setString('themeMode', mode);
   }
 
-    // GET y SET del modo de tema
+  // GET y SET del modo de tema
   bool get highContrast {
     return _prefs.getBool('highContrast') ?? false;
   }

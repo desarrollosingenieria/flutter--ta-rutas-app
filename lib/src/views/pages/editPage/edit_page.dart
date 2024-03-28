@@ -7,16 +7,22 @@ import 'package:tarutas/src/provider/card_provider.dart';
 import 'package:tarutas/src/provider/config_provider.dart';
 import 'package:tarutas/src/provider/routes_provider.dart';
 import 'package:tarutas/src/theme/color_app.dart';
-import 'package:tarutas/src/views/pages/homePage/widgets/button_widget.dart';
+import 'package:tarutas/src/views/widgets/button_widget.dart';
 
 class EditPage extends ConsumerStatefulWidget {
-  const EditPage({super.key});
+  final TACard? card;
+  const EditPage({super.key, this.card});
 
   @override
   EditPageState createState() => EditPageState();
 }
 
 class EditPageState extends ConsumerState<EditPage> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final taCard = ref.watch(cardProvider);
@@ -44,10 +50,10 @@ class EditPageState extends ConsumerState<EditPage> {
       backgroundColor: appConfig.highContrast ? Colors.black : Colors.white,
       appBar: MediaQuery.of(context).orientation == Orientation.portrait
           ? AppBar(
-              title: const Text(
-                'Agregar',
-                style:
-                    TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+              title: Text(
+                taCard.name != '' ? 'Editar ruta' : 'Nueva ruta',
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.white),
               ),
               backgroundColor: ColorApp.brandblue,
               iconTheme: const IconThemeData(color: Colors.white),
@@ -101,6 +107,14 @@ class EditPageState extends ConsumerState<EditPage> {
                       _pickImageFromGallery();
                     },
                     icon: const Icon(Icons.folder),
+                  ),
+                  IconButton.filled(
+                    style: const ButtonStyle(
+                        backgroundColor: MaterialStatePropertyAll(Colors.grey)),
+                    onPressed: () {
+                      _pickImageFromNetwork();
+                    },
+                    icon: const Icon(Icons.link),
                   ),
                   taCard.img != ''
                       ? IconButton.filled(
@@ -328,7 +342,6 @@ class EditPageState extends ConsumerState<EditPage> {
 
     if (returnedImage == null) return;
     ref.read(cardProvider.notifier).setImgCard(img: returnedImage.path);
-    print(returnedImage.path);
   }
 
   Future _pickImageFromCamera() async {
@@ -337,6 +350,109 @@ class EditPageState extends ConsumerState<EditPage> {
 
     if (returnedImage == null) return;
     ref.read(cardProvider.notifier).setImgCard(img: returnedImage.path);
-    print(returnedImage.path);
+  }
+
+  Future _pickImageFromNetwork() {
+    final Size mq = MediaQuery.of(context).size;
+    final appConfig = ref.watch(configProvider);
+    final TextEditingController imgController = TextEditingController();
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        content: Column(mainAxisSize: MainAxisSize.min, children: [
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Text(
+              'Dirección URL de la imagen',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: mq.width * 0.06,
+              ),
+            ),
+          ),
+          TextField(
+            controller: imgController,
+            style: TextStyle(
+              fontSize:
+                  MediaQuery.of(context).orientation == Orientation.portrait
+                      ? MediaQuery.of(context).size.width *
+                          1.2 *
+                          appConfig.factorSize
+                      : MediaQuery.of(context).size.height *
+                          1.2 *
+                          appConfig.factorSize,
+              fontWeight: FontWeight.bold,
+              color: appConfig.highContrast ? Colors.white : Colors.black,
+            ),
+            minLines: 1,
+            maxLines: 1,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+                borderSide: BorderSide(
+                  color: appConfig.highContrast ? Colors.white : Colors.black,
+                  width: 2,
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+                borderSide: BorderSide(
+                  color: appConfig.highContrast ? Colors.white : Colors.black,
+                  width: 2,
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+                borderSide: BorderSide(
+                    color: appConfig.highContrast ? Colors.white : Colors.black,
+                    width: 2),
+              ),
+              hintText: 'http://',
+              hintStyle: TextStyle(
+                color: appConfig.highContrast ? Colors.white : Colors.grey,
+              ),
+            ),
+          ),
+          SizedBox(
+            height: mq.width * 0.04,
+          ),
+          Container(
+            alignment: Alignment.center,
+            child: Material(
+              borderRadius: BorderRadius.circular(16),
+              color: Colors.blue,
+              child: InkWell(
+                borderRadius: BorderRadius.circular(16),
+                child: Container(
+                  alignment: Alignment.center,
+                  width: double.infinity,
+                  height: MediaQuery.of(context).size.width * 0.2,
+                  child: Text(
+                    'Finalizar'.toUpperCase(),
+                    style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width *
+                          0.68 *
+                          appConfig.factorSize,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                onTap: () {
+                  ref
+                      .read(cardProvider.notifier)
+                      .setImgCard(img: imgController.text);
+                  FocusScopeNode currentFocus = FocusScope.of(context);
+                  if (!currentFocus.hasPrimaryFocus) {
+                    currentFocus.unfocus();
+                  }
+                  Navigator.of(context).pop();
+                },
+              ),
+            ),
+          ),
+        ]),
+      ),
+    );
   }
 }

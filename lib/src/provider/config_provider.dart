@@ -15,7 +15,7 @@ class Config extends _$Config {
   AppConfig build() => AppConfig(
         factorSize: prefs.factorSize,
         factorText: prefs.factorText,
-        cardStyle: prefs.cardStyle,
+        editMode: prefs.editMode,
         highContrast: prefs.highContrast,
         ttsVolume: prefs.volume,
         ttsPitch: prefs.pitch,
@@ -40,9 +40,9 @@ class Config extends _$Config {
     state = state.copyWith(factorText: factorText, factorSize: factorSize);
   }
 
-  void setCardStyle(String cardStyle) {
-    prefs.cardStyle = cardStyle;
-    state = state.copyWith(cardStyle: cardStyle);
+  void setEditMode(bool mode) {
+    prefs.editMode = mode;
+    state = state.copyWith(editMode: mode);
   }
 
   void setHighContrast(bool status) {

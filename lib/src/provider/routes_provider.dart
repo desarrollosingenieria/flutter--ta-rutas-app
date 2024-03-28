@@ -28,12 +28,12 @@ class TARoutes extends _$TARoutes {
   }
 
   void setCard({required TACard card}) {
-    print('POR CONSTRUIR CARD CON PADRE ${card.parent}');
+    //print('POR CONSTRUIR CARD CON PADRE ${card.parent}');
     localDB.setCard(card: card);
   }
 
   void deleteCard(int index) {
-    print('BORRANDO CARD $index');
+    //print('BORRANDO CARD $index');
     localDB.deleteCard(index);
   }
 }

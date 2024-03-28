@@ -1,7 +1,7 @@
 class AppConfig {
   final double factorSize;
   final String factorText;
-  final String cardStyle;
+  final bool editMode;
   final bool highContrast;
   final double ttsVolume; // Range: 0-1
   final double ttsRate; // Range: 0-2
@@ -12,7 +12,7 @@ class AppConfig {
     required this.highContrast,
     required this.factorSize,
     required this.factorText,
-    required this.cardStyle,
+    required this.editMode,
     required this.ttsPitch,
     required this.ttsRate,
     this.ttsText,
@@ -22,7 +22,7 @@ class AppConfig {
   AppConfig copyWith({
     double? factorSize,
     String? factorText,
-    String? cardStyle,
+    bool? editMode,
     bool? highContrast,
     double? ttsVolume,
     double? ttsRate,
@@ -32,7 +32,7 @@ class AppConfig {
       AppConfig(
           factorSize: factorSize ?? this.factorSize,
           factorText: factorText ?? this.factorText,
-          cardStyle: cardStyle ?? this.cardStyle,
+          editMode: editMode ?? this.editMode,
           highContrast: highContrast ?? this.highContrast,
           ttsVolume: ttsVolume ?? this.ttsVolume,
           ttsPitch: ttsPitch ?? this.ttsPitch,

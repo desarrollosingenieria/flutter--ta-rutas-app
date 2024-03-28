@@ -30,10 +30,8 @@ class LocalData {
   }
 
   void setCard({required TACard card}) {
-    //cardBox!.add(card);
-    final int id = cardBox!.values.length;
     final taCard = TACard(
-      id: cardBox!.values.length,
+      id: card.id == 99999 ? cardBox!.values.length : card.id,
       name: card.name,
       text: card.text,
       color: card.color,
@@ -42,7 +40,7 @@ class LocalData {
       parent: card.parent,
       children: card.children,
     );
-    print('CREANDO RUTA $id DENTRO DE ID: ${taCard.parent}');
+    //print('CREANDO RUTA $id DENTRO DE ID: ${taCard.parent}');
     cardBox!.put(taCard.id, taCard);
     if (taCard.parent != null) {
       updateParentCard(idParent: taCard.parent!, idChild: taCard.id);
@@ -50,16 +48,16 @@ class LocalData {
   }
 
   void updateParentCard({required int idParent, required int idChild}) {
-    print('ACTUALIZANDO RUTA ID: $idParent');
+    //print('ACTUALIZANDO RUTA ID: $idParent');
     final cardParent = cardBox!.getAt(idParent) as TACard;
     TACard newCardParent =
         cardParent.copyWith(children: [...cardParent.children ?? [], idChild]);
     cardBox!.put(idParent, newCardParent);
-    print(
-        'RUTA ID $idParent CUENTA CON LAS RUTAS HIJAS: ${newCardParent.children}');
+    //print('RUTA ID $idParent CUENTA CON LAS RUTAS HIJAS: ${newCardParent.children}');
   }
 
   void deleteCard(int id) {
+    cardBox!.getAt(id);
     cardBox!.delete(id);
   }
 }

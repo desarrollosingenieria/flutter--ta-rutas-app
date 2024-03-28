@@ -2,8 +2,8 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:tarutas/src/data/local/user_preferences.dart';
 import 'package:tarutas/src/provider/card_provider.dart';
+import 'package:tarutas/src/provider/config_provider.dart';
 import 'package:tarutas/src/utils/transitions.dart';
 import 'package:tarutas/src/views/pages/editPage/edit_page.dart';
 
@@ -17,12 +17,13 @@ class AddButtonWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     Size mq = MediaQuery.of(context).size;
-    final UserPreferences prefs = UserPreferences();
+    final appConfig = ref.watch(configProvider);
+    Orientation orientation = MediaQuery.of(context).orientation;
     return Material(
       color: Colors.transparent,
       borderRadius: BorderRadius.circular(16),
       child: DottedBorder(
-        color: Colors.grey,
+        color: appConfig.highContrast ? Colors.white : Colors.grey,
         strokeWidth: 3,
         radius: const Radius.circular(16),
         dashPattern: const [20, 5],
@@ -34,25 +35,29 @@ class AddButtonWidget extends ConsumerWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(
+                Icon(
                   Icons.add,
-                  size: 34,
-                  color: Colors.grey,
+                  size: orientation == Orientation.portrait
+                      ? mq.width * appConfig.factorSize * 2
+                      : mq.height * appConfig.factorSize * 2,
+                  color: appConfig.highContrast ? Colors.white : Colors.grey,
                 ),
                 Text(
                   'Agregar',
                   style: TextStyle(
                       //fontSize: MediaQuery.of(context).size.height * 0.1,
-                      fontSize: mq.height * 0.02,
+                      fontSize: orientation == Orientation.portrait
+                          ? mq.width * appConfig.factorSize * 1.4
+                          : mq.height * appConfig.factorSize * 1.4,
                       fontWeight: FontWeight.bold,
-                      color: prefs.highContrast ? Colors.black : Colors.grey),
+                      color:
+                          appConfig.highContrast ? Colors.white : Colors.grey),
                 )
               ],
             ),
             onTap: () {
               HapticFeedback.lightImpact();
               ref.read(cardProvider.notifier).restartCard(idParent: idParent);
-
               ref.read(cardProvider.notifier).setParentCard(idParent: idParent);
               Navigator.push(
                 context,

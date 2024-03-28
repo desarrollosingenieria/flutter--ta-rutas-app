@@ -4,7 +4,7 @@ import 'package:tarutas/src/provider/config_provider.dart';
 import 'package:tarutas/src/provider/routes_provider.dart';
 import 'package:tarutas/src/utils/transitions.dart';
 import 'package:tarutas/src/views/pages/configPage/config_page.dart';
-import 'package:tarutas/src/views/pages/homePage/widgets/group_widget.dart';
+import 'package:tarutas/src/views/pages/groupPage/widgets/group_widget.dart';
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
@@ -28,20 +28,6 @@ class HomePage extends ConsumerWidget {
               centerTitle: true,
               elevation: 0,
               actions: [
-                IconButton(
-                  icon: const Icon(
-                    Icons.edit,
-                    color: Colors.white,
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      FadeTransitionRoute(
-                        widget: const ConfigPage(),
-                      ),
-                    );
-                  },
-                ),
                 IconButton(
                   icon: const Icon(
                     Icons.settings,
