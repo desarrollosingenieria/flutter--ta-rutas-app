@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tarutas/src/data/local/user_preferences.dart';
 import 'package:tarutas/src/provider/config_provider.dart';
+import 'package:tarutas/src/provider/routes_provider.dart';
 import 'package:tarutas/src/provider/tts_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -794,6 +795,49 @@ class ConfigPage extends ConsumerWidget {
                         ],
                       ),
                     ],
+                  ),
+                ),
+                SizedBox(
+                  height: orientation == Orientation.portrait
+                      ? mq.width * 0.08
+                      : mq.height * 0.08,
+                ),
+                Material(
+                  borderRadius: BorderRadius.circular(16),
+                  color: appConfig.highContrast
+                      ? prefs.highContrast
+                          ? Colors.white
+                          : Colors.red
+                      : Colors.red,
+                  child: InkWell(
+                    onTap: () {
+                      ref.read(tARoutesProvider.notifier).deleteAllCards();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Se eliminaron todas las rutas.'),
+                        ),
+                      );
+                    },
+                    borderRadius: BorderRadius.circular(16),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                              width: prefs.highContrast ? 2 : 0,
+                              color: Colors.white)),
+                      padding: const EdgeInsets.all(20),
+                      alignment: Alignment.center,
+                      child: Text(
+                        'Eliminar todas las rutas',
+                        style: TextStyle(
+                          color:
+                              prefs.highContrast ? Colors.black : Colors.white,
+                          fontSize: orientation == Orientation.portrait
+                              ? mq.width * appConfig.factorSize
+                              : mq.height * appConfig.factorSize,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
                 SizedBox(

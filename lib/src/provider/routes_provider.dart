@@ -33,7 +33,24 @@ class TARoutes extends _$TARoutes {
   }
 
   void deleteCard(int index) {
-    //print('BORRANDO CARD $index');
+    // ELIMINACION DE TARJETA Y SUS HIJOS
+    TACard card = localDB.cardBox!.get(index) as TACard;
+    if (card.children!.isNotEmpty) {
+      print('${card.children!.length} HIJOS: ${card.children}');
+      for (int i = card.children!.length - 1; i >= 0; i--) {
+        print('PROBANDO ELIMINAR ${card.children![i]}');
+        deleteCard(card.children![i]);
+      }
+    }
+    print('BORRANDO CARD $index');
     localDB.deleteCard(index);
+  }
+
+  void updateIDCards() {
+    localDB.updateIDCards();
+  }
+
+  void deleteAllCards() {
+    localDB.cardBox!.clear();
   }
 }

@@ -30,8 +30,9 @@ class LocalData {
   }
 
   void setCard({required TACard card}) {
+    print('${cardBox!.values.last.id + 1}');
     final taCard = TACard(
-      id: card.id == 99999 ? cardBox!.values.length : card.id,
+      id: card.id == 99999 ? cardBox!.values.last.id + 1 : card.id,
       name: card.name,
       text: card.text,
       color: card.color,
@@ -65,15 +66,35 @@ class LocalData {
     //print('RUTA ID $idParent CUENTA CON LAS RUTAS HIJAS: ${newCardParent.children}');
   }
 
+  void updateIDCards() {
+    Box<dynamic> box = cardBox!;
+    for (int i = 0; i < box.values.length; i++) {
+      TACard card = box.getAt(i);
+      print('CARD $i TIENE ID: ${card.id}');
+      if (card.id != i) {
+        print('ACTUALIZANDO CARD ID');
+        card = card.copyWith(
+          id: i,
+        );
+        box.putAt(i, card);
+        if (card.children!.isNotEmpty) {
+          for (int j = 0; j < card.children!.length; i++) {
+            TACard child = box.getAt(i);
+            print('CHILD $i TIENE PARENT: ${child.parent}');
+            child = card.copyWith(
+              parent: card.id,
+            );
+          }
+        }
+        // if (parent != null) {}
+        print('AHORA CARD $i TIENE ID: ${card.id}');
+      }
+    }
+  }
+
   void deleteCard(int id) {
     final TACard card = cardBox!.get(id);
-    if (card.children!.isNotEmpty && card.children != []) {
-      print('LAS RUTAS HIJAS SON: ${card.children}');
-      // ELIMINAR HIJOS
-      // card.children!.forEach((child) {
-      //   deleteCard(child);
-      // });
-    }
+
     if (card.parent != null) {
       print('ACTUALIZANDO LA RUTA PADRE: ${card.parent}');
       updateParentCard(

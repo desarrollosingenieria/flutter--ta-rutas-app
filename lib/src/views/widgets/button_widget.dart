@@ -173,19 +173,9 @@ class ButtonWidget extends ConsumerWidget {
                       minVerticalPadding: mq.width * 0.06,
                       title: const Text('Eliminar ruta'),
                       onTap: () {
-                        if (card.children!.isNotEmpty) {
-                          print(card.children);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                  'Para eliminar esta ruta, elimine primero las rutas que contiene'),
-                            ),
-                          );
-                        } else {
-                          ref
-                              .read(tARoutesProvider.notifier)
-                              .deleteCard(card.id);
-                        }
+                        ref.read(tARoutesProvider.notifier).deleteCard(card.id);
+                        // // SE ACTUALIZAN LOS ID DE LAS RUTAS
+                        // ref.read(tARoutesProvider.notifier).updateIDCards();
                         Navigator.of(context).pop();
                       },
                     ),

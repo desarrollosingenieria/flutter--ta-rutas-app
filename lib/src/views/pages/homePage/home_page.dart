@@ -14,7 +14,6 @@ class HomePage extends ConsumerWidget {
     //final UserPreferences prefs = UserPreferences();
     final appConfig = ref.watch(configProvider);
     ref.read(tARoutesProvider.notifier).openCardBox();
-    //ref.read(cardProvider.notifier).setParentCard();
     return Scaffold(
       backgroundColor: appConfig.highContrast ? Colors.black : Colors.white,
       appBar: MediaQuery.of(context).orientation == Orientation.portrait

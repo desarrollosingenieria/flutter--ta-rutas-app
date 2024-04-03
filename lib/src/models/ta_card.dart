@@ -40,6 +40,7 @@ class TACard {
     bool? isGroup,
     int? parent,
     List<int>? children,
+    int? id,
   }) =>
       TACard(
         name: name ?? this.name,
@@ -49,6 +50,6 @@ class TACard {
         isGroup: isGroup ?? this.isGroup,
         parent: parent ?? this.parent,
         children: children ?? this.children,
-        id: id,
+        id: id ?? this.id,
       );
 }
