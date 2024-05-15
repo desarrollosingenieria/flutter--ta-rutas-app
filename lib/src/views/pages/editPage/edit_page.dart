@@ -345,7 +345,9 @@ class EditPageState extends ConsumerState<EditPage> {
               width: double.infinity,
               height: MediaQuery.of(context).size.width * 0.2,
               child: Text(
-                'Crear ruta'.toUpperCase(),
+                taCard.id == 99999
+                    ? 'Crear ruta'.toUpperCase()
+                    : 'Guardar'.toUpperCase(),
                 style: TextStyle(
                   fontSize: MediaQuery.of(context).size.width *
                       0.68 *

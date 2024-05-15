@@ -53,8 +53,7 @@ class HomePage extends ConsumerWidget {
           builder: ((context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               return Padding(
-                padding: const EdgeInsets.only(
-                    left: 20.0, right: 20.0, top: 20.0, bottom: 20.0),
+                padding: const EdgeInsets.all(10.0),
                 child: ValueListenableBuilder(
                   valueListenable: ref
                       .read(tARoutesProvider.notifier)

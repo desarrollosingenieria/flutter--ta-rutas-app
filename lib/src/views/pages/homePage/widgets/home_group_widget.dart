@@ -20,8 +20,8 @@ class HomeGroupWidget extends ConsumerWidget {
       return GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          mainAxisSpacing: 6,
-          crossAxisSpacing: 6,
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 10,
         ),
         itemCount: listCards.length + 2,
         itemBuilder: ((_, index) {
@@ -51,8 +51,8 @@ class HomeGroupWidget extends ConsumerWidget {
         ? GridView(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              mainAxisSpacing: 6,
-              crossAxisSpacing: 6,
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 10,
             ),
             children: [
               AddButtonWidget(idParent: idParent),

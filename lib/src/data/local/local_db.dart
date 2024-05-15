@@ -51,7 +51,6 @@ class LocalData {
     );
     //debugPrint('CREANDO RUTA $id DENTRO DE ID: ${taCard.parent}');
     backupBox!.put(id, taCard);
-    print('backupBox TIENE ${backupBox!.length} RUTAS');
   }
   //
 
