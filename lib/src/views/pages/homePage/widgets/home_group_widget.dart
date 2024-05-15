@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tarutas/src/data/local/user_preferences.dart';
+import 'package:tarutas/src/views/pages/homePage/widgets/add_template_widget.dart';
 import 'package:tarutas/src/views/widgets/add_button_widget.dart';
 import 'package:tarutas/src/views/widgets/button_widget.dart';
 
-class GroupWidget extends ConsumerWidget {
+class HomeGroupWidget extends ConsumerWidget {
   final int? idParent;
   final List<dynamic> listCards;
-  const GroupWidget({super.key, this.idParent, required this.listCards});
+  const HomeGroupWidget({super.key, this.idParent, required this.listCards});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -22,7 +23,7 @@ class GroupWidget extends ConsumerWidget {
           mainAxisSpacing: 6,
           crossAxisSpacing: 6,
         ),
-        itemCount: listCards.length + 1,
+        itemCount: listCards.length + 2,
         itemBuilder: ((_, index) {
           if (index < listCards.length) {
             return ButtonWidget(
@@ -31,9 +32,15 @@ class GroupWidget extends ConsumerWidget {
             );
           } else {
             if (prefs.editMode) {
-              return AddButtonWidget(
-                idParent: idParent,
-              );
+              if (index == listCards.length) {
+                return AddButtonWidget(
+                  idParent: idParent,
+                );
+              } else {
+                return AddTemplateWidget(
+                  idParent: idParent,
+                );
+              }
             }
             return const SizedBox.shrink();
           }
@@ -44,10 +51,15 @@ class GroupWidget extends ConsumerWidget {
         ? GridView(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              mainAxisSpacing: 20,
-              crossAxisSpacing: 20,
+              mainAxisSpacing: 6,
+              crossAxisSpacing: 6,
             ),
-            children: [AddButtonWidget(idParent: idParent)],
+            children: [
+              AddButtonWidget(idParent: idParent),
+              AddTemplateWidget(
+                idParent: idParent,
+              ),
+            ],
           )
         : Center(
             child: Padding(

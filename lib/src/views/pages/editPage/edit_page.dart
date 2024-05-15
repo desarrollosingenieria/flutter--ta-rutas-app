@@ -94,27 +94,50 @@ class EditPageState extends ConsumerState<EditPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   IconButton.filled(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStatePropertyAll(
+                          appConfig.highContrast
+                              ? Colors.white
+                              : Colors.purple),
+                    ),
                     onPressed: () {
                       _pickImageFromCamera();
                     },
-                    icon: const Icon(Icons.camera_alt),
+                    icon: Icon(
+                      Icons.camera_alt,
+                      color:
+                          appConfig.highContrast ? Colors.black : Colors.white,
+                    ),
                   ),
                   IconButton.filled(
-                    style: const ButtonStyle(
-                        backgroundColor:
-                            MaterialStatePropertyAll(Colors.orange)),
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStatePropertyAll(
+                          appConfig.highContrast
+                              ? Colors.white
+                              : Colors.orange),
+                    ),
                     onPressed: () {
                       _pickImageFromGallery();
                     },
-                    icon: const Icon(Icons.folder),
+                    icon: Icon(
+                      Icons.folder,
+                      color:
+                          appConfig.highContrast ? Colors.black : Colors.white,
+                    ),
                   ),
                   IconButton.filled(
-                    style: const ButtonStyle(
-                        backgroundColor: MaterialStatePropertyAll(Colors.grey)),
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStatePropertyAll(
+                          appConfig.highContrast ? Colors.white : Colors.grey),
+                    ),
                     onPressed: () {
                       _pickImageFromNetwork();
                     },
-                    icon: const Icon(Icons.link),
+                    icon: Icon(
+                      Icons.link,
+                      color:
+                          appConfig.highContrast ? Colors.black : Colors.white,
+                    ),
                   ),
                   taCard.img != ''
                       ? IconButton.filled(
@@ -242,16 +265,25 @@ class EditPageState extends ConsumerState<EditPage> {
                 height: MediaQuery.of(context).size.width * 0.04,
               ),
               ListTile(
-                title: const Text(
+                title: Text(
                   'Es un grupo',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: appConfig.highContrast
+                          ? Colors.white
+                          : ColorApp.brandblue),
                 ),
                 tileColor: Colors.black12,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
-                subtitle: const Text(
-                    'Selecciona si quieres agregar más rutas dentro de esta.'),
+                subtitle: Text(
+                  'Selecciona si quieres agregar más rutas dentro de esta.',
+                  style: TextStyle(
+                      color: appConfig.highContrast
+                          ? Colors.white
+                          : ColorApp.brandblue),
+                ),
                 trailing: Switch(
                   thumbIcon: checkIcon,
                   value: taCard.isGroup,
@@ -297,39 +329,36 @@ class EditPageState extends ConsumerState<EditPage> {
                   ),
                 ),
               ),
-              Container(
-                alignment: Alignment.center,
-                child: Material(
-                  borderRadius: BorderRadius.circular(16),
-                  color: Colors.blue,
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(16),
-                    child: Container(
-                      alignment: Alignment.center,
-                      width: double.infinity,
-                      height: MediaQuery.of(context).size.width * 0.2,
-                      child: Text(
-                        'Crear ruta'.toUpperCase(),
-                        style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.width *
-                              0.68 *
-                              appConfig.factorSize,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    onTap: () {
-                      ref.read(tARoutesProvider.notifier).setCard(card: taCard);
-                      Navigator.of(context).pop();
-                    },
-                  ),
+            ],
+          ),
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+        child: Material(
+          borderRadius: BorderRadius.circular(16),
+          color: appConfig.highContrast ? Colors.white : Colors.blue,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(16),
+            child: Container(
+              alignment: Alignment.center,
+              width: double.infinity,
+              height: MediaQuery.of(context).size.width * 0.2,
+              child: Text(
+                'Crear ruta'.toUpperCase(),
+                style: TextStyle(
+                  fontSize: MediaQuery.of(context).size.width *
+                      0.68 *
+                      appConfig.factorSize,
+                  fontWeight: FontWeight.bold,
+                  color: appConfig.highContrast ? Colors.black : Colors.white,
                 ),
               ),
-              SizedBox(
-                height: MediaQuery.of(context).size.width * 0.1,
-              ),
-            ],
+            ),
+            onTap: () {
+              ref.read(tARoutesProvider.notifier).setCard(card: taCard);
+              Navigator.of(context).pop();
+            },
           ),
         ),
       ),

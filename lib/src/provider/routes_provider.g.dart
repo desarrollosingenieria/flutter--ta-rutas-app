@@ -6,7 +6,7 @@ part of 'routes_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$tARoutesHash() => r'a4cf84e66b5ff259cf480b32cd7d8e2ea7c09ff9';
+String _$tARoutesHash() => r'46d436c41b2f0a28af9ffe359ac8bf39587c5aef';
 
 /// See also [TARoutes].
 @ProviderFor(TARoutes)

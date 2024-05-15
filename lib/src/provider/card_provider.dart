@@ -22,7 +22,7 @@ class Card extends _$Card {
   }
 
   void restartCard({int? idParent}) {
-    //print('RESTABLECIENDO CARD HIJA DE $idParent');
+    //debugPrint('RESTABLECIENDO CARD HIJA DE $idParent');
     state = TACard(
       id: 99999,
       name: '',
@@ -36,7 +36,7 @@ class Card extends _$Card {
   }
 
   void setParentCard({int? idParent}) {
-    //print('SETEANDO PADRE: $idParent');
+    //debugPrint('SETEANDO PADRE: $idParent');
     state = state.copyWith(
       parent: idParent,
     );

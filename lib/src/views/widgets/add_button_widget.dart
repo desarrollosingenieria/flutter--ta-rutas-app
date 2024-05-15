@@ -1,4 +1,3 @@
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -21,54 +20,52 @@ class AddButtonWidget extends ConsumerWidget {
     Orientation orientation = MediaQuery.of(context).orientation;
     return Material(
       color: Colors.transparent,
-      borderRadius: BorderRadius.circular(16),
-      child: DottedBorder(
-        color: appConfig.highContrast ? Colors.white : Colors.grey,
-        strokeWidth: 3,
-        radius: const Radius.circular(16),
-        dashPattern: const [20, 5],
-        borderType: BorderType.RRect,
-        child: SizedBox(
-          width: double.infinity,
-          child: InkWell(
-            borderRadius: BorderRadius.circular(16),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.add,
-                  size: orientation == Orientation.portrait
-                      ? mq.width * appConfig.factorSize * 2
-                      : mq.height * appConfig.factorSize * 2,
-                  color: appConfig.highContrast ? Colors.white : Colors.grey,
-                ),
-                Text(
-                  'Agregar',
-                  style: TextStyle(
-                      //fontSize: MediaQuery.of(context).size.height * 0.1,
-                      fontSize: orientation == Orientation.portrait
-                          ? mq.width * appConfig.factorSize * 1.4
-                          : mq.height * appConfig.factorSize * 1.4,
-                      fontWeight: FontWeight.bold,
-                      color:
-                          appConfig.highContrast ? Colors.white : Colors.grey),
-                )
-              ],
-            ),
-            onTap: () {
-              HapticFeedback.lightImpact();
-              ref.read(cardProvider.notifier).restartCard(idParent: idParent);
-              ref.read(cardProvider.notifier).setParentCard(idParent: idParent);
-              Navigator.push(
-                context,
-                SlideLeftTransitionRoute(
-                  widget: const EditPage(),
-                ),
-              );
-            },
+      child: Container(
+        decoration: BoxDecoration(
+          //color: Colors.black.withOpacity(0.05),
+          border: Border.all(width: 2, color: Colors.grey),
+          borderRadius: BorderRadius.circular(16),
+        ),
+        width: double.infinity,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(14),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.add,
+                size: orientation == Orientation.portrait
+                    ? mq.width * appConfig.factorSize * 2
+                    : mq.height * appConfig.factorSize * 2,
+                color: appConfig.highContrast ? Colors.white : Colors.grey,
+              ),
+              Text(
+                'Nuevo',
+                style: TextStyle(
+                    //fontSize: MediaQuery.of(context).size.height * 0.1,
+                    fontSize: orientation == Orientation.portrait
+                        ? mq.width * appConfig.factorSize
+                        : mq.height * appConfig.factorSize,
+                    fontWeight: FontWeight.bold,
+                    color: appConfig.highContrast ? Colors.white : Colors.grey),
+              )
+            ],
           ),
+          onTap: () {
+            HapticFeedback.lightImpact();
+            ref.read(cardProvider.notifier).restartCard(idParent: idParent);
+            ref.read(cardProvider.notifier).setParentCard(idParent: idParent);
+            Navigator.push(
+              context,
+              SlideLeftTransitionRoute(
+                widget: const EditPage(),
+              ),
+            );
+          },
         ),
       ),
     );
   }
+
+  void showCustomDialog() {}
 }

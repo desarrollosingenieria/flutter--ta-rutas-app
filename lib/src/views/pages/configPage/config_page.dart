@@ -804,34 +804,84 @@ class ConfigPage extends ConsumerWidget {
                 ),
                 Material(
                   borderRadius: BorderRadius.circular(16),
-                  color: appConfig.highContrast
-                      ? prefs.highContrast
-                          ? Colors.white
-                          : Colors.red
-                      : Colors.red,
+                  color:
+                      appConfig.highContrast ? Colors.white : Colors.grey[400],
                   child: InkWell(
-                    onTap: () {
-                      ref.read(tARoutesProvider.notifier).deleteAllCards();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Se eliminaron todas las rutas.'),
-                        ),
-                      );
-                    },
+                    onTap: () {},
                     borderRadius: BorderRadius.circular(16),
                     child: Container(
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(
                               width: prefs.highContrast ? 2 : 0,
-                              color: Colors.white)),
+                              color: Colors.transparent)),
                       padding: const EdgeInsets.all(20),
                       alignment: Alignment.center,
                       child: Text(
-                        'Eliminar todas las rutas',
+                        'Exportar rutas',
                         style: TextStyle(
-                          color:
-                              prefs.highContrast ? Colors.black : Colors.white,
+                          color: appConfig.highContrast
+                              ? Colors.black
+                              : Colors.white,
+                          fontSize: orientation == Orientation.portrait
+                              ? mq.width * appConfig.factorSize
+                              : mq.height * appConfig.factorSize,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: orientation == Orientation.portrait
+                      ? mq.width * 0.02
+                      : mq.height * 0.02,
+                ),
+                Material(
+                  borderRadius: BorderRadius.circular(16),
+                  color: appConfig.highContrast ? Colors.pink : Colors.red,
+                  child: InkWell(
+                    onTap: () => showDialog(
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                        title: const Text('Eliminar rutas'),
+                        content: const Text(
+                            '¿Estás seguro que deseas eliminar todas las rutas? Esta acción no se podrá deshacer.'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, 'Cancelar'),
+                            child: const Text('CANCELAR'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context, 'Eliminar');
+                              ref
+                                  .read(tARoutesProvider.notifier)
+                                  .deleteAllCards();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content:
+                                      Text('Se eliminaron todas las rutas.'),
+                                ),
+                              );
+                            },
+                            child: const Text('ELIMINAR'),
+                          ),
+                        ],
+                      ),
+                    ),
+                    borderRadius: BorderRadius.circular(16),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                              width: prefs.highContrast ? 2 : 0,
+                              color: Colors.transparent)),
+                      padding: const EdgeInsets.all(20),
+                      alignment: Alignment.center,
+                      child: Text(
+                        'Eliminar rutas',
+                        style: TextStyle(
+                          color: Colors.white,
                           fontSize: orientation == Orientation.portrait
                               ? mq.width * appConfig.factorSize
                               : mq.height * appConfig.factorSize,

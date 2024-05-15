@@ -1,4 +1,4 @@
-package com.fleni.tarutas.tarutas
+package com.fleni.tarutas
 
 import io.flutter.embedding.android.FlutterActivity
 

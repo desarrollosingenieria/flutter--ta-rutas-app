@@ -1,4 +1,5 @@
 // ignore_for_file: depend_on_referenced_packages
+import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:tarutas/src/models/ta_card.dart';
@@ -6,6 +7,7 @@ import 'package:tarutas/src/models/ta_card.dart';
 class LocalData {
   var initialized = false;
   Box? cardBox;
+  Box? backupBox;
 
   Future<bool> init() async {
     var path = await getApplicationDocumentsDirectory();
@@ -18,6 +20,8 @@ class LocalData {
 
   Future<bool> openBox() async {
     cardBox = await Hive.openBox<TACard>('card');
+    backupBox = await Hive.openBox<TACard>('backup');
+
     return true;
   }
 
@@ -25,14 +29,44 @@ class LocalData {
     return cardBox;
   }
 
+  // SET AND GET BACKUP ROUTES - PLANTILLAS
+  Box? restoreRoutes() {
+    return backupBox;
+  }
+
+  Box? restoreRoute(int index) {
+    return backupBox!.getAt(index);
+  }
+
+  void backupRoute({required int id}) {
+    final TACard card = cardBox!.get(id);
+    final taCard = TACard(
+      id: card.id,
+      name: card.name,
+      text: card.text,
+      isGroup: card.isGroup,
+      parent: card.parent,
+      children: card.children,
+      color: card.color,
+    );
+    //debugPrint('CREANDO RUTA $id DENTRO DE ID: ${taCard.parent}');
+    backupBox!.put(id, taCard);
+    print('backupBox TIENE ${backupBox!.length} RUTAS');
+  }
+  //
+
   Box? getCard(int index) {
     return cardBox!.getAt(index);
   }
 
   void setCard({required TACard card}) {
-    print('${cardBox!.values.last.id + 1}');
+    int nextID = 0;
+    if (cardBox!.values.isNotEmpty) {
+      nextID = cardBox!.values.last.id + 1;
+    }
+    debugPrint('LA RUTA ${card.name} TENDRÁ ID: $nextID');
     final taCard = TACard(
-      id: card.id == 99999 ? cardBox!.values.last.id + 1 : card.id,
+      id: card.id == 99999 ? nextID : card.id,
       name: card.name,
       text: card.text,
       color: card.color,
@@ -41,7 +75,7 @@ class LocalData {
       parent: card.parent,
       children: card.children,
     );
-    //print('CREANDO RUTA $id DENTRO DE ID: ${taCard.parent}');
+    //debugPrint('CREANDO RUTA $id DENTRO DE ID: ${taCard.parent}');
     cardBox!.put(taCard.id, taCard);
     if (taCard.parent != null && card.id == 99999) {
       updateParentCard(
@@ -53,7 +87,7 @@ class LocalData {
       {required int idParent,
       required int idChild,
       required String operation}) {
-    //print('ACTUALIZANDO RUTA ID: $idParent');
+    //debugPrint('ACTUALIZANDO RUTA ID: $idParent');
     final cardParent = cardBox!.get(idParent) as TACard;
     TACard newCardParent = cardParent;
     if (operation == 'add') {
@@ -63,16 +97,31 @@ class LocalData {
       newCardParent.children!.remove(idChild);
     }
     cardBox!.put(idParent, newCardParent);
-    //print('RUTA ID $idParent CUENTA CON LAS RUTAS HIJAS: ${newCardParent.children}');
+    //debugPrint('RUTA ID $idParent CUENTA CON LAS RUTAS HIJAS: ${newCardParent.children}');
+  }
+
+  // RESTORE BACKUP BOX
+  void updateParentBackup({required int id, required int idParent}) {
+    TACard card = cardBox!.get(id) as TACard;
+    card = card.copyWith(parent: idParent);
+    cardBox!.put(id, card);
+  }
+
+  void updateChildBackup(
+      {required int id, required int idChild, required int newIdChild}) {
+    TACard card = cardBox!.get(id) as TACard;
+    card.children!.remove(idChild);
+    card = card.copyWith(children: [...card.children ?? [], newIdChild]);
+    cardBox!.put(id, card);
   }
 
   void updateIDCards() {
     Box<dynamic> box = cardBox!;
     for (int i = 0; i < box.values.length; i++) {
       TACard card = box.getAt(i);
-      print('CARD $i TIENE ID: ${card.id}');
+      debugPrint('CARD $i TIENE ID: ${card.id}');
       if (card.id != i) {
-        print('ACTUALIZANDO CARD ID');
+        debugPrint('ACTUALIZANDO CARD ID');
         card = card.copyWith(
           id: i,
         );
@@ -80,14 +129,14 @@ class LocalData {
         if (card.children!.isNotEmpty) {
           for (int j = 0; j < card.children!.length; i++) {
             TACard child = box.getAt(i);
-            print('CHILD $i TIENE PARENT: ${child.parent}');
+            debugPrint('CHILD $i TIENE PARENT: ${child.parent}');
             child = card.copyWith(
               parent: card.id,
             );
           }
         }
         // if (parent != null) {}
-        print('AHORA CARD $i TIENE ID: ${card.id}');
+        debugPrint('AHORA CARD $i TIENE ID: ${card.id}');
       }
     }
   }
@@ -96,7 +145,7 @@ class LocalData {
     final TACard card = cardBox!.get(id);
 
     if (card.parent != null) {
-      print('ACTUALIZANDO LA RUTA PADRE: ${card.parent}');
+      debugPrint('ACTUALIZANDO LA RUTA PADRE: ${card.parent}');
       updateParentCard(
           idParent: card.parent!, idChild: card.id, operation: 'remove');
       // ACTUALIZAR PADRE
