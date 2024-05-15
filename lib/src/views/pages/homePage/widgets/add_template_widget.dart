@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:tarutas/src/constants/constants.dart';
+import 'package:tarutas/src/data/local/user_preferences.dart';
 import 'package:tarutas/src/provider/config_provider.dart';
 import 'package:tarutas/src/provider/routes_provider.dart';
 import 'package:tarutas/src/utils/utils.dart';
@@ -22,6 +23,7 @@ class AddTemplateWidget extends ConsumerWidget {
     Size mq = MediaQuery.of(context).size;
     final appConfig = ref.watch(configProvider);
     Orientation orientation = MediaQuery.of(context).orientation;
+    final prefs = UserPreferences();
     return Material(
       color: Colors.transparent,
       child: Container(
@@ -72,24 +74,28 @@ class AddTemplateWidget extends ConsumerWidget {
                       minVerticalPadding: mq.width * 0.06,
                       leading: const Icon(Icons.family_restroom),
                       title: const Text('Usar plantilla FAMILIA'),
+                      enabled: prefs.templateFamilyLoaded ? false : true,
                       onTap: () async {
                         final String path =
                             await loadTemplates(TEMPLATE_FAMILY);
                         ref
                             .read(tARoutesProvider.notifier)
                             .importTemplate(backupPath: path);
+                        prefs.templateFamilyLoaded = true;
                         Navigator.pop(context);
                       },
                     ),
                     ListTile(
                       minVerticalPadding: mq.width * 0.06,
                       leading: const Icon(Icons.home),
-                      title: const Text('Usar plantilla HOGAR'),
+                      title: const Text('Usar plantilla CASA'),
+                      enabled: prefs.templateHomeLoaded ? false : true,
                       onTap: () async {
                         final String path = await loadTemplates(TEMPLATE_HOME);
                         ref
                             .read(tARoutesProvider.notifier)
                             .importTemplate(backupPath: path);
+                        prefs.templateHomeLoaded = true;
                         Navigator.pop(context);
                       },
                     ),
@@ -97,11 +103,13 @@ class AddTemplateWidget extends ConsumerWidget {
                       minVerticalPadding: mq.width * 0.06,
                       leading: const Icon(Icons.map),
                       title: const Text('Usar plantilla FLENI'),
+                      enabled: prefs.templateFleniLoaded ? false : true,
                       onTap: () async {
                         final String path = await loadTemplates(TEMPLATE_FLENI);
                         ref
                             .read(tARoutesProvider.notifier)
                             .importTemplate(backupPath: path);
+                        prefs.templateFleniLoaded = true;
                         Navigator.pop(context);
                       },
                     ),

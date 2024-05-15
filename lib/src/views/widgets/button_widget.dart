@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:tarutas/src/data/local/user_preferences.dart';
 import 'package:tarutas/src/models/ta_card.dart';
 import 'package:tarutas/src/provider/card_provider.dart';
 import 'package:tarutas/src/provider/config_provider.dart';
@@ -24,6 +25,7 @@ class ButtonWidget extends ConsumerWidget {
     Size mq = MediaQuery.of(context).size;
     Orientation orientation = MediaQuery.of(context).orientation;
     final appConfig = ref.watch(configProvider);
+    final prefs = UserPreferences();
     debugPrint(
         'CARD ${card.name} TIENE ID ${card.id} Y SUS HIJOS SON ${card.children}');
     return SizedBox(
@@ -176,6 +178,14 @@ class ButtonWidget extends ConsumerWidget {
                           ref
                               .read(tARoutesProvider.notifier)
                               .deleteCard(card.id);
+                          // SI SE ELIMINA UNA PLANTILLA
+                          if (card.name == 'Familia') {
+                            prefs.templateFamilyLoaded = false;
+                          } else if (card.name == 'Fleni') {
+                            prefs.templateFleniLoaded = false;
+                          } else if (card.name == 'Casa') {
+                            prefs.templateHomeLoaded = false;
+                          }
                           // // SE ACTUALIZAN LOS ID DE LAS RUTAS
                           // ref.read(tARoutesProvider.notifier).updateIDCards();
                           Navigator.of(context).pop();

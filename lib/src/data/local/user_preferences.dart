@@ -87,6 +87,33 @@ class UserPreferences {
     _prefs.setBool('highContrast', mode);
   }
 
+  // GET y SET template FLENI cargado
+  bool get templateFleniLoaded {
+    return _prefs.getBool('templateFleniLoaded') ?? false;
+  }
+
+  set templateFleniLoaded(bool isLoaded) {
+    _prefs.setBool('templateFleniLoaded', isLoaded);
+  }
+
+  // GET y SET template FAMILIA cargado
+  bool get templateFamilyLoaded {
+    return _prefs.getBool('templateFamilyLoaded') ?? false;
+  }
+
+  set templateFamilyLoaded(bool isLoaded) {
+    _prefs.setBool('templateFamilyLoaded', isLoaded);
+  }
+
+  // GET y SET template CASA cargado
+  bool get templateHomeLoaded {
+    return _prefs.getBool('templateHomeLoaded') ?? false;
+  }
+
+  set templateHomeLoaded(bool isLoaded) {
+    _prefs.setBool('templateHomeLoaded', isLoaded);
+  }
+
   Future<bool> cleanPrefs() async {
     return _prefs.clear();
   }
