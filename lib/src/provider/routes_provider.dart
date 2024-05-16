@@ -85,6 +85,27 @@ class TARoutes extends _$TARoutes {
     }
   }
 
+  Future<void> exportAllRoutes({required String backupPath}) async {
+    Box? box = localDB.cardBox;
+    final boxPath = box!.path!;
+    backupPath =
+        '$backupPath/TARutas-${DateTime.now().day.toString().padLeft(2, '0')}${DateTime.now().month.toString().padLeft(2, '0')}${DateTime.now().year}-backup.hive';
+
+    try {
+      await File(boxPath).copy(backupPath);
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+  Future<void> importAllRoutes({required String backupPath}) async {
+    Box? box = localDB.cardBox;
+    final boxPath = box!.path!;
+    await box.close();
+    File(backupPath).copy(boxPath); // copy backup file
+    await localDB.openBox();
+  }
+
   Future<void> importTemplate({required String backupPath}) async {
     Box? box = localDB.backupBox;
     final boxPath = box!.path!;

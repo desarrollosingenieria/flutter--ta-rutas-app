@@ -59,10 +59,12 @@ class ButtonWidget extends ConsumerWidget {
                           ? Container(
                               margin: const EdgeInsets.all(6),
                               alignment: Alignment.topRight,
-                              child: const Icon(
+                              child: Icon(
                                 Icons.arrow_circle_right_rounded,
                                 size: 34,
-                                color: TAColors.brandblue,
+                                color: appConfig.highContrast
+                                    ? Colors.black
+                                    : TAColors.brandblue,
                               ),
                             )
                           : const SizedBox.shrink(),

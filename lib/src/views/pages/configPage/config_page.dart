@@ -778,95 +778,207 @@ class ConfigPage extends ConsumerWidget {
                   ],
                 ),
               ),
-              SizedBox(
-                height: orientation == Orientation.portrait
-                    ? mq.width * 0.08
-                    : mq.height * 0.08,
-              ),
-              Material(
-                borderRadius: BorderRadius.circular(16),
-                color: appConfig.highContrast ? Colors.white : Colors.grey[400],
-                child: InkWell(
-                  onTap: () {},
-                  borderRadius: BorderRadius.circular(16),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                            width: prefs.highContrast ? 2 : 0,
-                            color: Colors.transparent)),
-                    padding: const EdgeInsets.all(20),
-                    alignment: Alignment.center,
-                    child: Text(
-                      'Exportar rutas',
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Rutas',
                       style: TextStyle(
-                        color: appConfig.highContrast
-                            ? Colors.black
-                            : Colors.white,
                         fontSize: orientation == Orientation.portrait
                             ? mq.width * appConfig.factorSize
                             : mq.height * appConfig.factorSize,
+                        fontWeight: FontWeight.bold,
+                        color: prefs.highContrast
+                            ? Colors.white
+                            : const Color(0xFF003A70),
                       ),
                     ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: orientation == Orientation.portrait
-                    ? mq.width * 0.02
-                    : mq.height * 0.02,
-              ),
-              Material(
-                borderRadius: BorderRadius.circular(16),
-                color: appConfig.highContrast ? Colors.pink : Colors.red,
-                child: InkWell(
-                  onTap: () => showDialog(
-                    context: context,
-                    builder: (BuildContext context) => AlertDialog(
-                      title: const Text('Eliminar rutas'),
-                      content: const Text(
-                          '¿Estás seguro que deseas eliminar todas las rutas? Esta acción no se podrá deshacer.'),
-                      actions: <Widget>[
-                        TextButton(
-                          onPressed: () => Navigator.pop(context, 'Cancelar'),
-                          child: const Text('CANCELAR'),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context, 'Eliminar');
-                            ref
-                                .read(tARoutesProvider.notifier)
-                                .deleteAllCards();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Se eliminaron todas las rutas.'),
+                    SizedBox(
+                      height: orientation == Orientation.portrait
+                          ? mq.width * 0.04
+                          : mq.height * 0.04,
+                    ),
+                    // Material(
+                    //   borderRadius: BorderRadius.circular(16),
+                    //   color: appConfig.highContrast
+                    //       ? Colors.white
+                    //       : Colors.grey[400],
+                    //   child: InkWell(
+                    //     onTap: () async {
+                    //       Directory? directory =
+                    //           await getExternalStorageDirectory();
+                    //       FilePicker.platform
+                    //           .pickFiles(
+                    //         initialDirectory: directory!.path,
+                    //         type: FileType.any,
+                    //       )
+                    //           .then(
+                    //         (result) {
+                    //           if (result != null &&
+                    //               result.files.single.extension ==
+                    //                   DB_EXTENSION) {
+                    //             File file = File(result.files.single.path!);
+                    //             ref
+                    //                 .read(tARoutesProvider.notifier)
+                    //                 .importAllRoutes(backupPath: file.path);
+                    //           } else {
+                    //             ScaffoldMessenger.of(context).showSnackBar(
+                    //               const SnackBar(
+                    //                 content: Text(
+                    //                   IMPORT_TEMPLATE_ERROR,
+                    //                 ),
+                    //               ),
+                    //             );
+                    //           }
+                    //         },
+                    //       );
+                    //     },
+                    //     borderRadius: BorderRadius.circular(16),
+                    //     child: Container(
+                    //       decoration: BoxDecoration(
+                    //           borderRadius: BorderRadius.circular(16),
+                    //           border: Border.all(
+                    //               width: prefs.highContrast ? 2 : 0,
+                    //               color: Colors.transparent)),
+                    //       padding: const EdgeInsets.all(20),
+                    //       alignment: Alignment.center,
+                    //       child: Text(
+                    //         'Importar rutas',
+                    //         style: TextStyle(
+                    //           color: appConfig.highContrast
+                    //               ? Colors.black
+                    //               : Colors.white,
+                    //           fontSize: orientation == Orientation.portrait
+                    //               ? mq.width * appConfig.factorSize
+                    //               : mq.height * appConfig.factorSize,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                    // SizedBox(
+                    //   height: orientation == Orientation.portrait
+                    //       ? mq.width * 0.02
+                    //       : mq.height * 0.02,
+                    // ),
+                    // Material(
+                    //   borderRadius: BorderRadius.circular(16),
+                    //   color: appConfig.highContrast
+                    //       ? Colors.white
+                    //       : Colors.grey[400],
+                    //   child: InkWell(
+                    //     onTap: () {
+                    //       FilePicker.platform.getDirectoryPath().then((result) {
+                    //         Navigator.of(context).pop();
+                    //         if (result != null) {
+                    //           ref
+                    //               .read(tARoutesProvider.notifier)
+                    //               .exportAllRoutes(backupPath: result);
+
+                    //           ScaffoldMessenger.of(context).showSnackBar(
+                    //             const SnackBar(
+                    //               content: Text(
+                    //                 'Se han guardado todas las plantillas',
+                    //               ),
+                    //             ),
+                    //           );
+                    //         } else {
+                    //           ScaffoldMessenger.of(context).showSnackBar(
+                    //             const SnackBar(
+                    //               content: Text(
+                    //                 'No se seleccionó una carpeta de destino',
+                    //               ),
+                    //             ),
+                    //           );
+                    //         }
+                    //       });
+                    //     },
+                    //     borderRadius: BorderRadius.circular(16),
+                    //     child: Container(
+                    //       decoration: BoxDecoration(
+                    //           borderRadius: BorderRadius.circular(16),
+                    //           border: Border.all(
+                    //               width: prefs.highContrast ? 2 : 0,
+                    //               color: Colors.transparent)),
+                    //       padding: const EdgeInsets.all(20),
+                    //       alignment: Alignment.center,
+                    //       child: Text(
+                    //         'Exportar rutas',
+                    //         style: TextStyle(
+                    //           color: appConfig.highContrast
+                    //               ? Colors.black
+                    //               : Colors.white,
+                    //           fontSize: orientation == Orientation.portrait
+                    //               ? mq.width * appConfig.factorSize
+                    //               : mq.height * appConfig.factorSize,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                    // SizedBox(
+                    //   height: orientation == Orientation.portrait
+                    //       ? mq.width * 0.02
+                    //       : mq.height * 0.02,
+                    // ),
+                    Material(
+                      borderRadius: BorderRadius.circular(16),
+                      color: appConfig.highContrast ? Colors.pink : Colors.red,
+                      child: InkWell(
+                        onTap: () => showDialog(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: const Text('Eliminar rutas'),
+                            content: const Text(
+                                '¿Estás seguro que deseas eliminar todas las rutas? Esta acción no se podrá deshacer.'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () =>
+                                    Navigator.pop(context, 'Cancelar'),
+                                child: const Text('CANCELAR'),
                               ),
-                            );
-                          },
-                          child: const Text('ELIMINAR'),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, 'Eliminar');
+                                  ref
+                                      .read(tARoutesProvider.notifier)
+                                      .deleteAllCards();
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                          'Se eliminaron todas las rutas.'),
+                                    ),
+                                  );
+                                },
+                                child: const Text('ELIMINAR'),
+                              ),
+                            ],
+                          ),
                         ),
-                      ],
-                    ),
-                  ),
-                  borderRadius: BorderRadius.circular(16),
-                  child: Container(
-                    decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                            width: prefs.highContrast ? 2 : 0,
-                            color: Colors.transparent)),
-                    padding: const EdgeInsets.all(20),
-                    alignment: Alignment.center,
-                    child: Text(
-                      'Eliminar rutas',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: orientation == Orientation.portrait
-                            ? mq.width * appConfig.factorSize
-                            : mq.height * appConfig.factorSize,
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(
+                                  width: prefs.highContrast ? 2 : 0,
+                                  color: Colors.transparent)),
+                          padding: const EdgeInsets.all(20),
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Eliminar rutas',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: orientation == Orientation.portrait
+                                  ? mq.width * appConfig.factorSize
+                                  : mq.height * appConfig.factorSize,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
               ),
               SizedBox(

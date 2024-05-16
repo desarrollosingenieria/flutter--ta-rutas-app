@@ -15,7 +15,6 @@ class HomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final appConfig = ref.watch(configProvider);
-    ref.read(tARoutesProvider.notifier).openCardBox();
     return Scaffold(
       backgroundColor: appConfig.highContrast ? Colors.black : Colors.white,
       appBar: MediaQuery.of(context).orientation == Orientation.portrait

@@ -44,7 +44,7 @@ class UserPreferences {
 
   // GET y SET de factorSize
   double get factorSize {
-    return _prefs.getDouble('factorSize') ?? 0.054;
+    return _prefs.getDouble('factorSize') ?? 0.06;
   }
 
   set factorSize(double factor) {
