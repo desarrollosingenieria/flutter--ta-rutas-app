@@ -36,7 +36,6 @@ class TARoutes extends _$TARoutes {
 
   void deleteCard(int index) {
     // ELIMINACION DE TARJETA Y SUS HIJOS
-    print('SE QUIERE ELIMINAR $index');
     TACard card = localDB.cardBox!.get(index) as TACard;
     if (card.children!.isNotEmpty) {
       debugPrint('${card.children!.length} HIJOS: ${card.children}');
@@ -92,10 +91,8 @@ class TARoutes extends _$TARoutes {
     try {
       await File(boxPath).copy(backupPath);
     } catch (e) {
-      print(e);
+      throw Exception();
     }
-
-    print('COPIA DE SEGURIDAD REALIZADA');
   }
 
   Future<void> importTemplate({required String backupPath}) async {
@@ -137,8 +134,6 @@ class TARoutes extends _$TARoutes {
           .where((child) => child.parent == restoredCard.id)
           .toList();
       children.forEach((child) => childrenID.add(child.id));
-      debugPrint(
-          'LOS NUEVOS HIJOS DE ${restoredCard.name} (ID ${restoredCard.id}) SON: ${childrenID}');
       restoredCard = restoredCard.copyWith(children: childrenID);
       localDB.setCard(card: restoredCard);
     }
@@ -147,7 +142,6 @@ class TARoutes extends _$TARoutes {
   Future<void> _clearBackupBox() async {
     await localDB.openBox();
     await localDB.backupBox!.clear();
-    print('BACKUPBOX  IS CLEAR');
   }
 
   void updateIDCards() {

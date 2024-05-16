@@ -44,7 +44,7 @@ class ButtonWidget extends ConsumerWidget {
                         padding: const EdgeInsets.all(10.0),
                         child: Center(
                           child: Text(
-                            '${card.name.toUpperCase()}',
+                            card.name.toUpperCase(),
                             style: TextStyle(
                                 fontSize: orientation == Orientation.portrait
                                     ? mq.width * appConfig.factorSize
@@ -86,7 +86,7 @@ class ButtonWidget extends ConsumerWidget {
                                     width: double.infinity,
                                     fit: BoxFit.cover,
                                   )
-                            : SizedBox.shrink(),
+                            : const SizedBox.shrink(),
                         Container(
                           height: double.infinity,
                           width: double.infinity,
@@ -198,18 +198,6 @@ class ButtonWidget extends ConsumerWidget {
                         onTap: () async {
                           Directory? directory =
                               await getExternalStorageDirectory();
-                          // String? directory =
-                          //     await FilePicker.platform.getDirectoryPath();
-
-                          // if (directory != null) {
-                          //   print(directory);
-                          //   ref
-                          //     .read(tARoutesProvider.notifier)
-                          //     .saveAndExportTemplate(
-                          //         id: card.id, backupPath: directory);
-                          // } else {
-                          //   // Do something else...
-                          //}
                           ref
                               .read(tARoutesProvider.notifier)
                               .saveAndExportTemplate(
