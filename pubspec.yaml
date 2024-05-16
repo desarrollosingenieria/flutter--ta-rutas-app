@@ -45,3 +45,11 @@ flutter:
 flutter_native_splash:
   color: "#003A70"
   image: "assets/images/tarutas-iso.png"
+
+  android_12:
+    color: "#003A70"
+    image: "assets/images/tarutas-iso.png"
+
+  web: false
+
+  android_gravity: center
