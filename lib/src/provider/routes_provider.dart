@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:tarutas/src/data/local/local_db.dart';
@@ -38,14 +36,10 @@ class TARoutes extends _$TARoutes {
     // ELIMINACION DE TARJETA Y SUS HIJOS
     TACard card = localDB.cardBox!.get(index) as TACard;
     if (card.children!.isNotEmpty) {
-      debugPrint('${card.children!.length} HIJOS: ${card.children}');
       for (int i = card.children!.length - 1; i >= 0; i--) {
-        debugPrint('PROBANDO ELIMINAR ${card.children![i]}');
         deleteCard(card.children![i]);
       }
     }
-
-    debugPrint('BORRANDO CARD $index');
     localDB.deleteCard(index);
   }
 
@@ -61,24 +55,20 @@ class TARoutes extends _$TARoutes {
     // SE CIERRA EL BOX BACKUP
     await box.close();
     // SE REALIZA LA COPIA DE SEGURIDAD
-    _exportTemplate(
+    await _exportTemplate(
         cardTitle: card.name, boxPath: boxPath, backupPath: backupPath);
     _clearBackupBox();
   }
 
   void _saveTemplate(int index) {
-    //File(boxPath).copy(backupPath);
     TACard card = localDB.cardBox!.get(index) as TACard;
     if (card.children!.isNotEmpty) {
-      debugPrint('${card.children!.length} HIJOS: ${card.children}');
       for (int i = card.children!.length - 1; i >= 0; i--) {
         _saveTemplate(card.children![i]);
       }
     }
-    debugPrint('AGREGANDO A BACKUP $index');
+
     localDB.backupRoute(id: index);
-    //await localDB.backupBox!.close();
-    //print('BACKUPBOX ESTÁ EN: ${File(Hive.box('backup').path!)}');
   }
 
   Future<void> _exportTemplate(
@@ -121,10 +111,8 @@ class TARoutes extends _$TARoutes {
       children: card.children,
     );
     localDB.setCard(card: restoredCard);
-    debugPrint('${card.name} TIENE PADRE ${restoredCard.parent}');
+
     if (card.children!.isNotEmpty) {
-      debugPrint(
-          '${card.name} TIENE ${card.children!.length} HIJOS: ${card.children}');
       for (int i = 0; i < card.children!.length; i++) {
         _loadTemplate(id: card.children![i], parentId: restoredCard.id);
       }
@@ -133,7 +121,10 @@ class TARoutes extends _$TARoutes {
       List children = localDB.cardBox!.values
           .where((child) => child.parent == restoredCard.id)
           .toList();
-      children.forEach((child) => childrenID.add(child.id));
+      for (int i = 0; i < children.length; i++) {
+        childrenID.add(children[i].id);
+      }
+
       restoredCard = restoredCard.copyWith(children: childrenID);
       localDB.setCard(card: restoredCard);
     }
@@ -142,10 +133,6 @@ class TARoutes extends _$TARoutes {
   Future<void> _clearBackupBox() async {
     await localDB.openBox();
     await localDB.backupBox!.clear();
-  }
-
-  void updateIDCards() {
-    localDB.updateIDCards();
   }
 
   void deleteAllCards() {

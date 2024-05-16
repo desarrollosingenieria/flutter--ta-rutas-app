@@ -1,5 +1,3 @@
-// ignore_for_file: depend_on_referenced_packages
-import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:tarutas/src/models/ta_card.dart';
@@ -49,7 +47,6 @@ class LocalData {
       children: card.children,
       color: card.color,
     );
-    //debugPrint('CREANDO RUTA $id DENTRO DE ID: ${taCard.parent}');
     backupBox!.put(id, taCard);
   }
   //
@@ -63,7 +60,6 @@ class LocalData {
     if (cardBox!.values.isNotEmpty) {
       nextID = cardBox!.values.last.id + 1;
     }
-    debugPrint('LA RUTA ${card.name} TENDRÁ ID: $nextID');
     final taCard = TACard(
       id: card.id == 99999 ? nextID : card.id,
       name: card.name,
@@ -74,7 +70,6 @@ class LocalData {
       parent: card.parent,
       children: card.children,
     );
-    //debugPrint('CREANDO RUTA $id DENTRO DE ID: ${taCard.parent}');
     cardBox!.put(taCard.id, taCard);
     if (taCard.parent != null && card.id == 99999) {
       updateParentCard(
@@ -86,7 +81,6 @@ class LocalData {
       {required int idParent,
       required int idChild,
       required String operation}) {
-    //debugPrint('ACTUALIZANDO RUTA ID: $idParent');
     final cardParent = cardBox!.get(idParent) as TACard;
     TACard newCardParent = cardParent;
     if (operation == 'add') {
@@ -96,7 +90,6 @@ class LocalData {
       newCardParent.children!.remove(idChild);
     }
     cardBox!.put(idParent, newCardParent);
-    //debugPrint('RUTA ID $idParent CUENTA CON LAS RUTAS HIJAS: ${newCardParent.children}');
   }
 
   // RESTORE BACKUP BOX
@@ -114,37 +107,10 @@ class LocalData {
     cardBox!.put(id, card);
   }
 
-  void updateIDCards() {
-    Box<dynamic> box = cardBox!;
-    for (int i = 0; i < box.values.length; i++) {
-      TACard card = box.getAt(i);
-      debugPrint('CARD $i TIENE ID: ${card.id}');
-      if (card.id != i) {
-        debugPrint('ACTUALIZANDO CARD ID');
-        card = card.copyWith(
-          id: i,
-        );
-        box.putAt(i, card);
-        if (card.children!.isNotEmpty) {
-          for (int j = 0; j < card.children!.length; i++) {
-            TACard child = box.getAt(i);
-            debugPrint('CHILD $i TIENE PARENT: ${child.parent}');
-            child = card.copyWith(
-              parent: card.id,
-            );
-          }
-        }
-        // if (parent != null) {}
-        debugPrint('AHORA CARD $i TIENE ID: ${card.id}');
-      }
-    }
-  }
-
   void deleteCard(int id) {
     final TACard card = cardBox!.get(id);
 
     if (card.parent != null) {
-      debugPrint('ACTUALIZANDO LA RUTA PADRE: ${card.parent}');
       updateParentCard(
           idParent: card.parent!, idChild: card.id, operation: 'remove');
       // ACTUALIZAR PADRE

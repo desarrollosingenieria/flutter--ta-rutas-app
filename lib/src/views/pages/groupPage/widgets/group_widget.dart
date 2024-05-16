@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tarutas/src/constants/constants.dart';
 import 'package:tarutas/src/data/local/user_preferences.dart';
 import 'package:tarutas/src/views/widgets/add_button_widget.dart';
 import 'package:tarutas/src/views/widgets/button_widget.dart';
@@ -19,8 +20,8 @@ class GroupWidget extends ConsumerWidget {
       return GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          mainAxisSpacing: 6,
-          crossAxisSpacing: 6,
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 10,
         ),
         itemCount: listCards.length + 1,
         itemBuilder: ((_, index) {
@@ -44,14 +45,14 @@ class GroupWidget extends ConsumerWidget {
         ? GridView(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              mainAxisSpacing: 20,
-              crossAxisSpacing: 20,
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 10,
             ),
             children: [AddButtonWidget(idParent: idParent)],
           )
         : Center(
             child: Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(10.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -71,7 +72,7 @@ class GroupWidget extends ConsumerWidget {
                     height: mq.width * 0.04,
                   ),
                   Text(
-                    'Habilite el Modo Editor en configuraciones para agregar nuevas rutas.',
+                    EDIT_MODE_TEXT,
                     style: TextStyle(
                       color: prefs.highContrast ? Colors.white : Colors.black,
                       fontSize: orientation == Orientation.portrait

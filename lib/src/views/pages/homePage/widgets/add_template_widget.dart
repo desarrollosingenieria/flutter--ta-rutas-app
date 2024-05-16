@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -27,7 +26,6 @@ class AddTemplateWidget extends ConsumerWidget {
       color: Colors.transparent,
       child: Container(
         decoration: BoxDecoration(
-          //color: Colors.black.withOpacity(0.05),
           border: Border.all(width: 2, color: Colors.grey),
           borderRadius: BorderRadius.circular(16),
         ),
@@ -47,7 +45,6 @@ class AddTemplateWidget extends ConsumerWidget {
               Text(
                 'Plantilla',
                 style: TextStyle(
-                    //fontSize: MediaQuery.of(context).size.height * 0.1,
                     fontSize: orientation == Orientation.portrait
                         ? mq.width * appConfig.factorSize
                         : mq.height * appConfig.factorSize,
@@ -58,58 +55,54 @@ class AddTemplateWidget extends ConsumerWidget {
           ),
           onTap: () => showModalBottomSheet(
               context: context,
+              showDragHandle: true,
               builder: (context) {
                 return Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    Divider(
-                      thickness: 4,
-                      height: 40,
-                      color: Colors.black12,
-                      indent: mq.width * 0.4,
-                      endIndent: mq.width * 0.4,
-                    ),
                     ListTile(
                       minVerticalPadding: mq.width * 0.06,
                       leading: const Icon(Icons.family_restroom),
-                      title: const Text('Usar plantilla FAMILIA'),
+                      title: const Text(TEMPLATE_FAMILY_TEXT),
                       enabled: prefs.templateFamilyLoaded ? false : true,
                       onTap: () async {
-                        final String path =
-                            await loadTemplates(TEMPLATE_FAMILY);
-                        ref
-                            .read(tARoutesProvider.notifier)
-                            .importTemplate(backupPath: path);
-                        prefs.templateFamilyLoaded = true;
-                        Navigator.pop(context);
+                        loadTemplates(TEMPLATE_FAMILY).then((path) {
+                          ref
+                              .read(tARoutesProvider.notifier)
+                              .importTemplate(backupPath: path);
+                          prefs.templateFamilyLoaded = true;
+                          Navigator.pop(context);
+                        });
                       },
                     ),
                     ListTile(
                       minVerticalPadding: mq.width * 0.06,
                       leading: const Icon(Icons.home),
-                      title: const Text('Usar plantilla CASA'),
+                      title: const Text(TEMPLATE_HOME_TEXT),
                       enabled: prefs.templateHomeLoaded ? false : true,
                       onTap: () async {
-                        final String path = await loadTemplates(TEMPLATE_HOME);
-                        ref
-                            .read(tARoutesProvider.notifier)
-                            .importTemplate(backupPath: path);
-                        prefs.templateHomeLoaded = true;
-                        Navigator.pop(context);
+                        loadTemplates(TEMPLATE_HOME).then((path) {
+                          ref
+                              .read(tARoutesProvider.notifier)
+                              .importTemplate(backupPath: path);
+                          prefs.templateHomeLoaded = true;
+                          Navigator.pop(context);
+                        });
                       },
                     ),
                     ListTile(
                       minVerticalPadding: mq.width * 0.06,
                       leading: const Icon(Icons.map),
-                      title: const Text('Usar plantilla FLENI'),
+                      title: const Text(TEMPLATE_FLENI_TEXT),
                       enabled: prefs.templateFleniLoaded ? false : true,
                       onTap: () async {
-                        final String path = await loadTemplates(TEMPLATE_FLENI);
-                        ref
-                            .read(tARoutesProvider.notifier)
-                            .importTemplate(backupPath: path);
-                        prefs.templateFleniLoaded = true;
-                        Navigator.pop(context);
+                        loadTemplates(TEMPLATE_FLENI).then((path) {
+                          ref
+                              .read(tARoutesProvider.notifier)
+                              .importTemplate(backupPath: path);
+                          prefs.templateFleniLoaded = true;
+                          Navigator.pop(context);
+                        });
                       },
                     ),
                     const Divider(
@@ -119,32 +112,35 @@ class AddTemplateWidget extends ConsumerWidget {
                     ListTile(
                       minVerticalPadding: mq.width * 0.06,
                       leading: const Icon(Icons.folder),
-                      title: const Text('Importar plantilla desde...'),
+                      title: const Text(IMPORT_TEMPLATE_TEXT),
                       onTap: () async {
                         Directory? directory =
                             await getExternalStorageDirectory();
-                        FilePickerResult? result =
-                            await FilePicker.platform.pickFiles(
+                        FilePicker.platform
+                            .pickFiles(
                           initialDirectory: directory!.path,
                           type: FileType.any,
+                        )
+                            .then(
+                          (result) {
+                            if (result != null &&
+                                result.files.single.extension == DB_EXTENSION) {
+                              File file = File(result.files.single.path!);
+                              ref
+                                  .read(tARoutesProvider.notifier)
+                                  .importTemplate(backupPath: file.path);
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    IMPORT_TEMPLATE_ERROR,
+                                  ),
+                                ),
+                              );
+                            }
+                            Navigator.pop(context);
+                          },
                         );
-
-                        if (result != null &&
-                            result.files.single.extension == 'hive') {
-                          File file = File(result.files.single.path!);
-                          ref
-                              .read(tARoutesProvider.notifier)
-                              .importTemplate(backupPath: file.path);
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                'El archivo seleccionado no tiene un formato válido. Vuelva a intentarlo.',
-                              ),
-                            ),
-                          );
-                        }
-                        Navigator.pop(context);
                       },
                     ),
                   ],
@@ -154,6 +150,4 @@ class AddTemplateWidget extends ConsumerWidget {
       ),
     );
   }
-
-  void showCustomDialog() {}
 }

@@ -20,6 +20,7 @@ class Config extends _$Config {
         ttsVolume: prefs.volume,
         ttsPitch: prefs.pitch,
         ttsRate: prefs.rate,
+        rows: 2,
       );
 
   void setFactorSize(double size, String factorText) {

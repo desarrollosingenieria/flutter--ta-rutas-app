@@ -6,37 +6,17 @@ part 'card_provider.g.dart';
 @Riverpod(keepAlive: true)
 class Card extends _$Card {
   @override
-  TACard build() => const TACard(
-        id: 99999,
-        name: '',
-        text: '',
-        color: '0xff9e9e9e',
-        isGroup: false,
-        parent: null,
-        img: '',
-        children: [],
-      );
+  TACard build() => TACard.empty;
 
   void setCard({required TACard card}) {
     state = card;
   }
 
   void restartCard({int? idParent}) {
-    //debugPrint('RESTABLECIENDO CARD HIJA DE $idParent');
-    state = TACard(
-      id: 99999,
-      name: '',
-      text: '',
-      color: '0xff9e9e9e',
-      isGroup: false,
-      parent: idParent,
-      children: [],
-      img: '',
-    );
+    state = TACard.empty;
   }
 
   void setParentCard({int? idParent}) {
-    //debugPrint('SETEANDO PADRE: $idParent');
     state = state.copyWith(
       parent: idParent,
     );

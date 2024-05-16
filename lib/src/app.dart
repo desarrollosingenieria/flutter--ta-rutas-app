@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
+import 'package:tarutas/src/constants/constants.dart';
+import 'package:tarutas/src/theme/color_app.dart';
 import 'package:tarutas/src/views/pages/homePage/home_page.dart';
 
 class TARutas extends StatelessWidget {
@@ -6,13 +9,15 @@ class TARutas extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'TA Rutas',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const HomePage(),
+    return Sizer(
+      builder: (context, orientation, deviceType) {
+        return MaterialApp(
+          title: APP_NAME,
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(primaryColor: TAColors.brandblue),
+          home: const HomePage(),
+        );
+      },
     );
   }
 }

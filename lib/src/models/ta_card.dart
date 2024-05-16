@@ -32,6 +32,17 @@ class TACard {
     required this.id,
   });
 
+  static const empty = TACard(
+    id: 99999,
+    name: '',
+    text: '',
+    color: '0xff9e9e9e',
+    isGroup: false,
+    parent: null,
+    img: '',
+    children: [],
+  );
+
   TACard copyWith({
     String? name,
     String? text,

@@ -22,7 +22,6 @@ class AddButtonWidget extends ConsumerWidget {
       color: Colors.transparent,
       child: Container(
         decoration: BoxDecoration(
-          //color: Colors.black.withOpacity(0.05),
           border: Border.all(width: 2, color: Colors.grey),
           borderRadius: BorderRadius.circular(16),
         ),
@@ -42,7 +41,6 @@ class AddButtonWidget extends ConsumerWidget {
               Text(
                 'Nuevo',
                 style: TextStyle(
-                    //fontSize: MediaQuery.of(context).size.height * 0.1,
                     fontSize: orientation == Orientation.portrait
                         ? mq.width * appConfig.factorSize
                         : mq.height * appConfig.factorSize,

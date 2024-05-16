@@ -7,6 +7,7 @@ class AppConfig {
   final double ttsRate; // Range: 0-2
   final double ttsPitch; // Range: 0-2
   final String? ttsText;
+  final int rows;
 
   AppConfig({
     required this.highContrast,
@@ -17,6 +18,7 @@ class AppConfig {
     required this.ttsRate,
     this.ttsText,
     required this.ttsVolume,
+    required this.rows,
   });
 
   AppConfig copyWith({
@@ -28,6 +30,7 @@ class AppConfig {
     double? ttsRate,
     double? ttsPitch,
     String? ttsText,
+    int? rows,
   }) =>
       AppConfig(
           factorSize: factorSize ?? this.factorSize,
@@ -37,5 +40,7 @@ class AppConfig {
           ttsVolume: ttsVolume ?? this.ttsVolume,
           ttsPitch: ttsPitch ?? this.ttsPitch,
           ttsRate: ttsRate ?? this.ttsRate,
-          ttsText: ttsText ?? this.ttsText);
+          ttsText: ttsText ?? this.ttsText,
+          rows: rows ?? this.rows,
+          );
 }

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class ColorApp {
-  static const Color primaryLight = Color(0xFFF8F8FF);
-  static const Color primaryDark = Color(0xFF070928);
-  static const Color secondaryLight = Color(0xFFEBEBF4);
-  static const Color tertiaryLight = Color(0xFFBEBFCC);
-  static const Color secondaryDark = Color(0xFF1B1E41);
-  static const Color tertiaryDark = Color(0xFF2C2F57);
+class TAColors {
+  static const Color light = Color(0xFFF8F8FF);
+  static const Color dark = Color(0xFF070928);
+  static const Color containerLight = Color(0xFFEBEBF4);
+  static const Color onContainerLight = Color(0xFFBEBFCC);
+  static const Color containerDark = Color(0xFF1B1E41);
+  static const Color onContainerDark = Color(0xFF2C2F57);
 
   static const Color brandblue = Color(0xFF003A70);
 }

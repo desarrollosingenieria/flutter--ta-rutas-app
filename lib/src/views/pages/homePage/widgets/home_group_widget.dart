@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tarutas/src/constants/constants.dart';
 import 'package:tarutas/src/data/local/user_preferences.dart';
 import 'package:tarutas/src/views/pages/homePage/widgets/add_template_widget.dart';
 import 'package:tarutas/src/views/widgets/add_button_widget.dart';
@@ -83,7 +84,7 @@ class HomeGroupWidget extends ConsumerWidget {
                     height: mq.width * 0.04,
                   ),
                   Text(
-                    'Habilite el Modo Editor en configuraciones para agregar nuevas rutas.',
+                    EDIT_MODE_TEXT,
                     style: TextStyle(
                       color: prefs.highContrast ? Colors.white : Colors.black,
                       fontSize: orientation == Orientation.portrait

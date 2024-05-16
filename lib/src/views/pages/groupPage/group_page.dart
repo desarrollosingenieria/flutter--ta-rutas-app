@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:tarutas/src/constants/constants.dart';
 import 'package:tarutas/src/provider/config_provider.dart';
 import 'package:tarutas/src/provider/routes_provider.dart';
 import 'package:tarutas/src/theme/color_app.dart';
@@ -20,11 +21,11 @@ class GroupPage extends ConsumerWidget {
       appBar: MediaQuery.of(context).orientation == Orientation.portrait
           ? AppBar(
               title: Text(
-                groupName ?? 'TA Rutas',
+                groupName ?? APP_NAME,
                 style: const TextStyle(
                     fontWeight: FontWeight.bold, color: Colors.white),
               ),
-              backgroundColor: groupColor ?? ColorApp.brandblue,
+              backgroundColor: groupColor ?? TAColors.brandblue,
               iconTheme: const IconThemeData(color: Colors.white),
               centerTitle: true,
               elevation: 0,
@@ -40,14 +41,13 @@ class GroupPage extends ConsumerWidget {
             if (snapshot.connectionState == ConnectionState.done) {
               return Padding(
                 padding:
-                    const EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0),
+                    const EdgeInsets.all(10.0),
                 child: ValueListenableBuilder(
                   valueListenable: ref
                       .read(tARoutesProvider.notifier)
                       .getSavedRoutes()
                       .listenable(),
                   builder: (context, box, _) {
-                    debugPrint('HAY ${box.values.length} RUTAS EN EL BOX');
                     List<dynamic> listCards = [];
 
                     listCards = box.values
@@ -59,7 +59,7 @@ class GroupPage extends ConsumerWidget {
                 ),
               );
             } else {
-              return const Center(child: Text('Cargando...'));
+              return const CircularProgressIndicator();
             }
           })),
     );

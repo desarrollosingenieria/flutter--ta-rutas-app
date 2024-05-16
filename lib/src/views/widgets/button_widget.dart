@@ -1,9 +1,10 @@
 import 'dart:io';
+import 'package:file_picker/file_picker.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:tarutas/src/constants/constants.dart';
 import 'package:tarutas/src/data/local/user_preferences.dart';
 import 'package:tarutas/src/models/ta_card.dart';
 import 'package:tarutas/src/provider/card_provider.dart';
@@ -26,8 +27,6 @@ class ButtonWidget extends ConsumerWidget {
     Orientation orientation = MediaQuery.of(context).orientation;
     final appConfig = ref.watch(configProvider);
     final prefs = UserPreferences();
-    debugPrint(
-        'CARD ${card.name} TIENE ID ${card.id} Y SUS HIJOS SON ${card.children}');
     return SizedBox(
       height: mq.width * 0.04,
       child: Material(
@@ -63,7 +62,7 @@ class ButtonWidget extends ConsumerWidget {
                               child: const Icon(
                                 Icons.arrow_circle_right_rounded,
                                 size: 34,
-                                color: ColorApp.brandblue,
+                                color: TAColors.brandblue,
                               ),
                             )
                           : const SizedBox.shrink(),
@@ -74,7 +73,7 @@ class ButtonWidget extends ConsumerWidget {
                     child: Stack(
                       children: [
                         card.img != null
-                            ? card.img!.contains('http')
+                            ? card.img!.contains(HTTP_EXTENSION)
                                 ? Image.network(
                                     card.img!,
                                     width: double.infinity,
@@ -99,7 +98,6 @@ class ButtonWidget extends ConsumerWidget {
                             child: Text(
                               card.name.toUpperCase(),
                               style: TextStyle(
-                                  //fontSize: MediaQuery.of(context).size.height * 0.1,
                                   fontSize: mq.height * 0.03,
                                   fontWeight: FontWeight.bold,
                                   color: appConfig.highContrast
@@ -117,7 +115,7 @@ class ButtonWidget extends ConsumerWidget {
                                   size: 34,
                                   color: card.img != ''
                                       ? card.color.toColor
-                                      : ColorApp.brandblue,
+                                      : TAColors.brandblue,
                                 ),
                               )
                             : const SizedBox.shrink(),
@@ -155,7 +153,7 @@ class ButtonWidget extends ConsumerWidget {
                       ),
                       ListTile(
                         minVerticalPadding: mq.width * 0.06,
-                        title: const Text('Editar ruta'),
+                        title: const Text(EDIT_ROUTE_TEXT),
                         leading: const Icon(Icons.edit),
                         onTap: () {
                           ref.read(cardProvider.notifier).setCard(card: card);
@@ -173,44 +171,51 @@ class ButtonWidget extends ConsumerWidget {
                       ListTile(
                         minVerticalPadding: mq.width * 0.06,
                         leading: const Icon(Icons.delete),
-                        title: const Text('Eliminar ruta'),
+                        title: const Text(DELETE_ROUTE_TEXT),
                         onTap: () {
                           ref
                               .read(tARoutesProvider.notifier)
                               .deleteCard(card.id);
-                          // SI SE ELIMINA UNA PLANTILLA
-                          if (card.name == 'Familia') {
+                          if (card.name == TEMPLATE_FAMILY_TITLE) {
                             prefs.templateFamilyLoaded = false;
-                          } else if (card.name == 'Fleni') {
+                          } else if (card.name == TEMPLATE_FLENI_TITLE) {
                             prefs.templateFleniLoaded = false;
-                          } else if (card.name == 'Casa') {
+                          } else if (card.name == TEMPLATE_HOME_TITLE) {
                             prefs.templateHomeLoaded = false;
                           }
-                          // // SE ACTUALIZAN LOS ID DE LAS RUTAS
-                          // ref.read(tARoutesProvider.notifier).updateIDCards();
                           Navigator.of(context).pop();
                         },
                       ),
                       ListTile(
                         minVerticalPadding: mq.width * 0.06,
                         leading: const Icon(Icons.file_download),
-                        title: const Text('Guardar plantilla'),
+                        title: const Text(SAVE_TEMPLATE),
                         onTap: () async {
-                          Directory? directory =
-                              await getExternalStorageDirectory();
-                          ref
-                              .read(tARoutesProvider.notifier)
-                              .saveAndExportTemplate(
-                                  id: card.id, backupPath: directory!.path);
+                          FilePicker.platform.getDirectoryPath().then((result) {
+                            Navigator.of(context).pop();
+                            if (result != null) {
+                              ref
+                                  .read(tARoutesProvider.notifier)
+                                  .saveAndExportTemplate(
+                                      id: card.id, backupPath: result);
 
-                          Navigator.of(context).pop();
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                'Se ha guardado la plantilla ${card.name}',
-                              ),
-                            ),
-                          );
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'Se ha guardado la plantilla ${card.name}',
+                                  ),
+                                ),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    'No se seleccionó una carpeta de destino',
+                                  ),
+                                ),
+                              );
+                            }
+                          });
                         },
                       ),
                       const Divider(
@@ -220,7 +225,7 @@ class ButtonWidget extends ConsumerWidget {
                       ListTile(
                         minVerticalPadding: mq.width * 0.06,
                         leading: const Icon(Icons.cancel),
-                        title: const Text('Cancelar'),
+                        title: const Text(CANCEL_TEXT),
                         onTap: () {
                           Navigator.of(context).pop();
                         },

@@ -2,6 +2,7 @@ import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:tarutas/src/constants/constants.dart';
 import 'package:tarutas/src/models/ta_card.dart';
 import 'package:tarutas/src/provider/card_provider.dart';
 import 'package:tarutas/src/provider/config_provider.dart';
@@ -28,10 +29,10 @@ class EditPageState extends ConsumerState<EditPage> {
     final taCard = ref.watch(cardProvider);
     final TextEditingController titleController = TextEditingController();
     final TextEditingController textController = TextEditingController();
-    final MaterialStateProperty<Icon?> checkIcon =
-        MaterialStateProperty.resolveWith<Icon?>(
-      (Set<MaterialState> states) {
-        if (states.contains(MaterialState.selected)) {
+    final WidgetStateProperty<Icon?> checkIcon =
+        WidgetStateProperty.resolveWith<Icon?>(
+      (Set<WidgetState> states) {
+        if (states.contains(WidgetState.selected)) {
           return const Icon(Icons.check);
         }
         return const Icon(Icons.close);
@@ -51,11 +52,11 @@ class EditPageState extends ConsumerState<EditPage> {
       appBar: MediaQuery.of(context).orientation == Orientation.portrait
           ? AppBar(
               title: Text(
-                taCard.name != '' ? 'Editar ruta' : 'Nueva ruta',
+                taCard.name != '' ? EDIT_ROUTE_TEXT : NEW_ROUTE_TEXT,
                 style: const TextStyle(
                     fontWeight: FontWeight.bold, color: Colors.white),
               ),
-              backgroundColor: ColorApp.brandblue,
+              backgroundColor: TAColors.brandblue,
               iconTheme: const IconThemeData(color: Colors.white),
               centerTitle: true,
               elevation: 0,
@@ -95,7 +96,7 @@ class EditPageState extends ConsumerState<EditPage> {
                 children: [
                   IconButton.filled(
                     style: ButtonStyle(
-                      backgroundColor: MaterialStatePropertyAll(
+                      backgroundColor: WidgetStatePropertyAll(
                           appConfig.highContrast
                               ? Colors.white
                               : Colors.purple),
@@ -111,7 +112,7 @@ class EditPageState extends ConsumerState<EditPage> {
                   ),
                   IconButton.filled(
                     style: ButtonStyle(
-                      backgroundColor: MaterialStatePropertyAll(
+                      backgroundColor: WidgetStatePropertyAll(
                           appConfig.highContrast
                               ? Colors.white
                               : Colors.orange),
@@ -127,7 +128,7 @@ class EditPageState extends ConsumerState<EditPage> {
                   ),
                   IconButton.filled(
                     style: ButtonStyle(
-                      backgroundColor: MaterialStatePropertyAll(
+                      backgroundColor: WidgetStatePropertyAll(
                           appConfig.highContrast ? Colors.white : Colors.grey),
                     ),
                     onPressed: () {
@@ -143,7 +144,7 @@ class EditPageState extends ConsumerState<EditPage> {
                       ? IconButton.filled(
                           style: const ButtonStyle(
                               backgroundColor:
-                                  MaterialStatePropertyAll(Colors.red)),
+                                  WidgetStatePropertyAll(Colors.red)),
                           onPressed: () {
                             ref.read(cardProvider.notifier).setImgCard(img: '');
                           },
@@ -252,7 +253,7 @@ class EditPageState extends ConsumerState<EditPage> {
                             : Colors.black,
                         width: 2),
                   ),
-                  hintText: 'Texto',
+                  hintText: 'Texto a pronunciar',
                   hintStyle: TextStyle(
                     color: appConfig.highContrast ? Colors.white : Colors.grey,
                   ),
@@ -271,7 +272,7 @@ class EditPageState extends ConsumerState<EditPage> {
                       fontWeight: FontWeight.bold,
                       color: appConfig.highContrast
                           ? Colors.white
-                          : ColorApp.brandblue),
+                          : TAColors.brandblue),
                 ),
                 tileColor: Colors.black12,
                 shape: RoundedRectangleBorder(
@@ -282,7 +283,7 @@ class EditPageState extends ConsumerState<EditPage> {
                   style: TextStyle(
                       color: appConfig.highContrast
                           ? Colors.white
-                          : ColorApp.brandblue),
+                          : TAColors.brandblue),
                 ),
                 trailing: Switch(
                   thumbIcon: checkIcon,
