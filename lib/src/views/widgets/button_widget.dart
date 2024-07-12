@@ -100,7 +100,9 @@ class ButtonWidget extends ConsumerWidget {
                             child: Text(
                               card.name.toUpperCase(),
                               style: TextStyle(
-                                  fontSize: mq.height * 0.03,
+                                  fontSize: orientation == Orientation.portrait
+                                    ? mq.width * appConfig.factorSize
+                                    : mq.height * appConfig.factorSize,
                                   fontWeight: FontWeight.bold,
                                   color: appConfig.highContrast
                                       ? Colors.black
@@ -154,7 +156,6 @@ class ButtonWidget extends ConsumerWidget {
                         endIndent: mq.width * 0.4,
                       ),
                       ListTile(
-                        minVerticalPadding: mq.width * 0.06,
                         title: const Text(EDIT_ROUTE_TEXT),
                         leading: const Icon(Icons.edit),
                         onTap: () {
@@ -171,7 +172,6 @@ class ButtonWidget extends ConsumerWidget {
                         },
                       ),
                       ListTile(
-                        minVerticalPadding: mq.width * 0.06,
                         leading: const Icon(Icons.delete),
                         title: const Text(DELETE_ROUTE_TEXT),
                         onTap: () {
@@ -189,7 +189,6 @@ class ButtonWidget extends ConsumerWidget {
                         },
                       ),
                       ListTile(
-                        minVerticalPadding: mq.width * 0.06,
                         leading: const Icon(Icons.file_download),
                         title: const Text(SAVE_TEMPLATE),
                         onTap: () async {
@@ -225,7 +224,6 @@ class ButtonWidget extends ConsumerWidget {
                         color: Colors.black12,
                       ),
                       ListTile(
-                        minVerticalPadding: mq.width * 0.06,
                         leading: const Icon(Icons.cancel),
                         title: const Text(CANCEL_TEXT),
                         onTap: () {

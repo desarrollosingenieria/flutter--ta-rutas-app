@@ -1,5 +1,7 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:tarutas/src/constants/constants.dart';
 import 'package:tarutas/src/data/local/user_preferences.dart';
 import 'package:tarutas/src/provider/config_provider.dart';
@@ -800,129 +802,71 @@ class ConfigPage extends ConsumerWidget {
                           ? mq.width * 0.04
                           : mq.height * 0.04,
                     ),
-                    // Material(
-                    //   borderRadius: BorderRadius.circular(16),
-                    //   color: appConfig.highContrast
-                    //       ? Colors.white
-                    //       : Colors.grey[400],
-                    //   child: InkWell(
-                    //     onTap: () async {
-                    //       Directory? directory =
-                    //           await getExternalStorageDirectory();
-                    //       FilePicker.platform
-                    //           .pickFiles(
-                    //         initialDirectory: directory!.path,
-                    //         type: FileType.any,
-                    //       )
-                    //           .then(
-                    //         (result) {
-                    //           if (result != null &&
-                    //               result.files.single.extension ==
-                    //                   DB_EXTENSION) {
-                    //             File file = File(result.files.single.path!);
-                    //             ref
-                    //                 .read(tARoutesProvider.notifier)
-                    //                 .importAllRoutes(backupPath: file.path);
-                    //           } else {
-                    //             ScaffoldMessenger.of(context).showSnackBar(
-                    //               const SnackBar(
-                    //                 content: Text(
-                    //                   IMPORT_TEMPLATE_ERROR,
-                    //                 ),
-                    //               ),
-                    //             );
-                    //           }
-                    //         },
-                    //       );
-                    //     },
-                    //     borderRadius: BorderRadius.circular(16),
-                    //     child: Container(
-                    //       decoration: BoxDecoration(
-                    //           borderRadius: BorderRadius.circular(16),
-                    //           border: Border.all(
-                    //               width: prefs.highContrast ? 2 : 0,
-                    //               color: Colors.transparent)),
-                    //       padding: const EdgeInsets.all(20),
-                    //       alignment: Alignment.center,
-                    //       child: Text(
-                    //         'Importar rutas',
-                    //         style: TextStyle(
-                    //           color: appConfig.highContrast
-                    //               ? Colors.black
-                    //               : Colors.white,
-                    //           fontSize: orientation == Orientation.portrait
-                    //               ? mq.width * appConfig.factorSize
-                    //               : mq.height * appConfig.factorSize,
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
-                    // SizedBox(
-                    //   height: orientation == Orientation.portrait
-                    //       ? mq.width * 0.02
-                    //       : mq.height * 0.02,
-                    // ),
-                    // Material(
-                    //   borderRadius: BorderRadius.circular(16),
-                    //   color: appConfig.highContrast
-                    //       ? Colors.white
-                    //       : Colors.grey[400],
-                    //   child: InkWell(
-                    //     onTap: () {
-                    //       FilePicker.platform.getDirectoryPath().then((result) {
-                    //         Navigator.of(context).pop();
-                    //         if (result != null) {
-                    //           ref
-                    //               .read(tARoutesProvider.notifier)
-                    //               .exportAllRoutes(backupPath: result);
+                    
+                    Material(
+                      borderRadius: BorderRadius.circular(16),
+                      color: appConfig.highContrast
+                          ? Colors.white
+                          : Colors.grey[400],
+                      child: InkWell(
+                        onTap: () async {
+                          var status = await Permission.storage.status;
+                          if (!status.isGranted) {
+                            await Permission.storage.request();
+                          }
+                          FilePicker.platform.getDirectoryPath().then((result) {
+                            Navigator.of(context).pop();
+                            if (result != null) {
+                              ref
+                                  .read(tARoutesProvider.notifier)
+                                  .exportAllRoutes(backupPath: result);
 
-                    //           ScaffoldMessenger.of(context).showSnackBar(
-                    //             const SnackBar(
-                    //               content: Text(
-                    //                 'Se han guardado todas las plantillas',
-                    //               ),
-                    //             ),
-                    //           );
-                    //         } else {
-                    //           ScaffoldMessenger.of(context).showSnackBar(
-                    //             const SnackBar(
-                    //               content: Text(
-                    //                 'No se seleccionó una carpeta de destino',
-                    //               ),
-                    //             ),
-                    //           );
-                    //         }
-                    //       });
-                    //     },
-                    //     borderRadius: BorderRadius.circular(16),
-                    //     child: Container(
-                    //       decoration: BoxDecoration(
-                    //           borderRadius: BorderRadius.circular(16),
-                    //           border: Border.all(
-                    //               width: prefs.highContrast ? 2 : 0,
-                    //               color: Colors.transparent)),
-                    //       padding: const EdgeInsets.all(20),
-                    //       alignment: Alignment.center,
-                    //       child: Text(
-                    //         'Exportar rutas',
-                    //         style: TextStyle(
-                    //           color: appConfig.highContrast
-                    //               ? Colors.black
-                    //               : Colors.white,
-                    //           fontSize: orientation == Orientation.portrait
-                    //               ? mq.width * appConfig.factorSize
-                    //               : mq.height * appConfig.factorSize,
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
-                    // SizedBox(
-                    //   height: orientation == Orientation.portrait
-                    //       ? mq.width * 0.02
-                    //       : mq.height * 0.02,
-                    // ),
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    'Se han guardado todas las plantillas',
+                                  ),
+                                ),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    'No se seleccionó una carpeta de destino',
+                                  ),
+                                ),
+                              );
+                            }
+                          });
+                        },
+                        borderRadius: BorderRadius.circular(16),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(
+                                  width: prefs.highContrast ? 2 : 0,
+                                  color: Colors.transparent)),
+                          padding: const EdgeInsets.all(20),
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Exportar rutas',
+                            style: TextStyle(
+                              color: appConfig.highContrast
+                                  ? Colors.black
+                                  : Colors.white,
+                              fontSize: orientation == Orientation.portrait
+                                  ? mq.width * appConfig.factorSize
+                                  : mq.height * appConfig.factorSize,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: orientation == Orientation.portrait
+                          ? mq.width * 0.02
+                          : mq.height * 0.02,
+                    ),
                     Material(
                       borderRadius: BorderRadius.circular(16),
                       color: appConfig.highContrast ? Colors.pink : Colors.red,
@@ -945,6 +889,9 @@ class ConfigPage extends ConsumerWidget {
                                   ref
                                       .read(tARoutesProvider.notifier)
                                       .deleteAllCards();
+                                  prefs.templateHomeLoaded = false;
+                                  prefs.templateFleniLoaded = false;
+                                  prefs.templateFamilyLoaded = false;
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                       content: Text(

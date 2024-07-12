@@ -1,7 +1,10 @@
 import 'dart:io';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:tarutas/src/constants/constants.dart';
 import 'package:tarutas/src/data/local/local_db.dart';
+import 'package:tarutas/src/data/local/user_preferences.dart';
 import 'package:tarutas/src/models/ta_card.dart';
 
 part 'routes_provider.g.dart';
@@ -71,10 +74,12 @@ class TARoutes extends _$TARoutes {
     localDB.backupRoute(id: index);
   }
 
-  Future<void> _exportTemplate(
-      {required cardTitle,
-      required String boxPath,
-      required String backupPath}) async {
+  Future<void> _exportTemplate({required cardTitle,required String boxPath,required String backupPath}) async {
+    var status = await Permission.storage.status;
+    if (!status.isGranted) {
+      await Permission.storage.request();
+    }
+     
     backupPath =
         '$backupPath/$cardTitle-${DateTime.now().day.toString().padLeft(2, '0')}${DateTime.now().month.toString().padLeft(2, '0')}${DateTime.now().year}-backup.hive';
 
@@ -88,6 +93,11 @@ class TARoutes extends _$TARoutes {
   Future<void> exportAllRoutes({required String backupPath}) async {
     Box? box = localDB.cardBox;
     final boxPath = box!.path!;
+    var status = await Permission.storage.status;
+    if (!status.isGranted) {
+      await Permission.storage.request();
+    }
+
     backupPath =
         '$backupPath/TARutas-${DateTime.now().day.toString().padLeft(2, '0')}${DateTime.now().month.toString().padLeft(2, '0')}${DateTime.now().year}-backup.hive';
 
@@ -99,22 +109,41 @@ class TARoutes extends _$TARoutes {
   }
 
   Future<void> importAllRoutes({required String backupPath}) async {
-    Box? box = localDB.cardBox;
-    final boxPath = box!.path!;
-    await box.close();
-    File(backupPath).copy(boxPath); // copy backup file
-    await localDB.openBox();
-  }
-
-  Future<void> importTemplate({required String backupPath}) async {
     Box? box = localDB.backupBox;
     final boxPath = box!.path!;
     await box.close();
     File(backupPath).copy(boxPath); // copy backup file
     await localDB.openBox();
-    final parentCard = localDB.backupBox!.values.first as TACard;
-    _loadTemplate(id: parentCard.id);
     _clearBackupBox();
+    _loadAllTemplates();
+  }
+
+  Future<void> importTemplate({required String backupPath}) async {
+    Box? box = localDB.backupBox;
+    final prefs = UserPreferences();
+    final boxPath = box!.path!;
+    await box.close();
+    File(backupPath).copy(boxPath); // copy backup file
+    await localDB.openBox();
+    final parentCards = localDB.backupBox!.values.where((card) => card.parent == null);
+    for (var parent in parentCards) {
+      if (parent.name == TEMPLATE_FAMILY_TITLE) {
+        prefs.templateFamilyLoaded = true;
+      } else if (parent.name == TEMPLATE_FLENI_TITLE) {
+        prefs.templateFleniLoaded = true;
+      } else if (parent.name == TEMPLATE_HOME_TITLE) {
+        prefs.templateHomeLoaded = true;
+      }
+      _loadTemplate(id: parent.id);
+    } 
+    _clearBackupBox();
+  }
+
+  Future<void> _loadAllTemplates() async {
+    _clearCardBox();
+    final Box cardBox = localDB.cardBox!;
+    final Iterable allRoutes = localDB.backupBox!.values;
+    await cardBox.addAll(allRoutes);
   }
 
   Future<void> _loadTemplate({required int id, int? parentId}) async {
@@ -154,6 +183,11 @@ class TARoutes extends _$TARoutes {
   Future<void> _clearBackupBox() async {
     await localDB.openBox();
     await localDB.backupBox!.clear();
+  }
+
+  Future<void> _clearCardBox() async {
+    await localDB.openBox();
+    await localDB.cardBox!.clear();
   }
 
   void deleteAllCards() {

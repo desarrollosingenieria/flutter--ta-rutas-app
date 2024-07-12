@@ -56,12 +56,12 @@ class AddTemplateWidget extends ConsumerWidget {
           onTap: () => showModalBottomSheet(
               context: context,
               showDragHandle: true,
+              
               builder: (context) {
                 return Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
+                  children: [
                     ListTile(
-                      minVerticalPadding: mq.width * 0.06,
                       leading: const Icon(Icons.family_restroom),
                       title: const Text(TEMPLATE_FAMILY_TEXT),
                       enabled: prefs.templateFamilyLoaded ? false : true,
@@ -76,7 +76,6 @@ class AddTemplateWidget extends ConsumerWidget {
                       },
                     ),
                     ListTile(
-                      minVerticalPadding: mq.width * 0.06,
                       leading: const Icon(Icons.home),
                       title: const Text(TEMPLATE_HOME_TEXT),
                       enabled: prefs.templateHomeLoaded ? false : true,
@@ -91,7 +90,6 @@ class AddTemplateWidget extends ConsumerWidget {
                       },
                     ),
                     ListTile(
-                      minVerticalPadding: mq.width * 0.06,
                       leading: const Icon(Icons.map),
                       title: const Text(TEMPLATE_FLENI_TEXT),
                       enabled: prefs.templateFleniLoaded ? false : true,
@@ -110,7 +108,6 @@ class AddTemplateWidget extends ConsumerWidget {
                       color: Colors.black12,
                     ),
                     ListTile(
-                      minVerticalPadding: mq.width * 0.06,
                       leading: const Icon(Icons.folder),
                       title: const Text(IMPORT_TEMPLATE_TEXT),
                       onTap: () async {

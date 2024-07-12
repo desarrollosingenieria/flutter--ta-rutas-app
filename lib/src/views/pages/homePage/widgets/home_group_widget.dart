@@ -19,8 +19,8 @@ class HomeGroupWidget extends ConsumerWidget {
 
     if (listCards.isNotEmpty) {
       return GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: mq.width >= LARGE_SCREEN_SIZE ? 4 : (mq.width < LARGE_SCREEN_SIZE && mq.width >= MEDIUM_SCREEN_SIZE) ? 3 : 2,
           mainAxisSpacing: 10,
           crossAxisSpacing: 10,
         ),
@@ -50,8 +50,8 @@ class HomeGroupWidget extends ConsumerWidget {
     }
     return prefs.editMode
         ? GridView(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: mq.width >= LARGE_SCREEN_SIZE ? 4 : (mq.width < LARGE_SCREEN_SIZE && mq.width >= MEDIUM_SCREEN_SIZE) ? 3 : 2,
               mainAxisSpacing: 10,
               crossAxisSpacing: 10,
             ),

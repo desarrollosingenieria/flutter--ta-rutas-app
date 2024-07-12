@@ -47,25 +47,20 @@ class EditPageState extends ConsumerState<EditPage> {
         baseOffset: textController.text.length,
         extentOffset: textController.text.length);
     final appConfig = ref.watch(configProvider);
+    final Size mq = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: appConfig.highContrast ? Colors.black : Colors.white,
-      appBar: MediaQuery.of(context).orientation == Orientation.portrait
-          ? AppBar(
-              title: Text(
-                taCard.name != '' ? EDIT_ROUTE_TEXT : NEW_ROUTE_TEXT,
-                style: const TextStyle(
-                    fontWeight: FontWeight.bold, color: Colors.white),
-              ),
-              backgroundColor: TAColors.brandblue,
-              iconTheme: const IconThemeData(color: Colors.white),
-              centerTitle: true,
-              elevation: 0,
-            )
-          : const PreferredSize(
-              preferredSize: Size.zero,
-              child: SafeArea(
-                child: SizedBox.shrink(),
-              )),
+      appBar: AppBar(
+        title: Text(
+          taCard.name != '' ? EDIT_ROUTE_TEXT : NEW_ROUTE_TEXT,
+          style:
+              const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+        backgroundColor: TAColors.brandblue,
+        iconTheme: const IconThemeData(color: Colors.white),
+        centerTitle: true,
+        elevation: 0,
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -73,8 +68,8 @@ class EditPageState extends ConsumerState<EditPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
-                width: MediaQuery.of(context).size.width * 0.4,
-                height: MediaQuery.of(context).size.width * 0.4,
+                width: mq.width > LARGE_SCREEN_SIZE ? mq.width * 0.16 : mq.width < LARGE_SCREEN_SIZE && mq.width >= MEDIUM_SCREEN_SIZE ? mq.width * 0.3 : mq.width * 0.4,
+                height: mq.width > LARGE_SCREEN_SIZE ? mq.width * 0.16 : mq.width < LARGE_SCREEN_SIZE && mq.width >= MEDIUM_SCREEN_SIZE ? mq.width * 0.3 : mq.width * 0.4,
                 child: AbsorbPointer(
                   child: ButtonWidget(
                     card: TACard(
@@ -330,38 +325,39 @@ class EditPageState extends ConsumerState<EditPage> {
                   ),
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-        child: Material(
-          borderRadius: BorderRadius.circular(16),
-          color: appConfig.highContrast ? Colors.white : Colors.blue,
-          child: InkWell(
-            borderRadius: BorderRadius.circular(16),
-            child: Container(
-              alignment: Alignment.center,
-              width: double.infinity,
-              height: MediaQuery.of(context).size.width * 0.2,
-              child: Text(
-                taCard.id == 99999
-                    ? 'Crear ruta'.toUpperCase()
-                    : 'Guardar'.toUpperCase(),
-                style: TextStyle(
-                  fontSize: MediaQuery.of(context).size.width *
-                      0.68 *
-                      appConfig.factorSize,
-                  fontWeight: FontWeight.bold,
-                  color: appConfig.highContrast ? Colors.black : Colors.white,
+              SizedBox(
+                height: MediaQuery.of(context).size.width * 0.04,
+              ),
+              Material(
+                borderRadius: BorderRadius.circular(16),
+                color: appConfig.highContrast ? Colors.white : Colors.blue,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(16),
+                  child: Container(
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.all(20.0),
+                    child: Text(
+                      taCard.id == 99999
+                          ? 'Crear ruta'.toUpperCase()
+                          : 'Guardar'.toUpperCase(),
+                      style: TextStyle(
+                        fontSize: MediaQuery.of(context).size.width *
+                            0.68 *
+                            appConfig.factorSize,
+                        fontWeight: FontWeight.bold,
+                        color: appConfig.highContrast
+                            ? Colors.black
+                            : Colors.white,
+                      ),
+                    ),
+                  ),
+                  onTap: () {
+                    ref.read(tARoutesProvider.notifier).setCard(card: taCard);
+                    Navigator.of(context).pop();
+                  },
                 ),
               ),
-            ),
-            onTap: () {
-              ref.read(tARoutesProvider.notifier).setCard(card: taCard);
-              Navigator.of(context).pop();
-            },
+            ],
           ),
         ),
       ),

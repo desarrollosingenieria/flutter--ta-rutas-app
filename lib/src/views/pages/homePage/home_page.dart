@@ -17,8 +17,7 @@ class HomePage extends ConsumerWidget {
     final appConfig = ref.watch(configProvider);
     return Scaffold(
       backgroundColor: appConfig.highContrast ? Colors.black : Colors.white,
-      appBar: MediaQuery.of(context).orientation == Orientation.portrait
-          ? AppBar(
+      appBar: AppBar(
               title: const Text(
                 APP_NAME,
                 style:
@@ -44,11 +43,7 @@ class HomePage extends ConsumerWidget {
                 ),
               ],
             )
-          : const PreferredSize(
-              preferredSize: Size.zero,
-              child: SafeArea(
-                child: SizedBox.shrink(),
-              )),
+          ,
       body: FutureBuilder(
         future: ref.read(tARoutesProvider.notifier).openCardBox(),
         builder: (context, snapshot) {

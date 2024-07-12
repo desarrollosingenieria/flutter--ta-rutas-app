@@ -18,8 +18,7 @@ class GroupPage extends ConsumerWidget {
     final appConfig = ref.watch(configProvider);
     return Scaffold(
       backgroundColor: appConfig.highContrast ? Colors.black : Colors.white,
-      appBar: MediaQuery.of(context).orientation == Orientation.portrait
-          ? AppBar(
+      appBar: AppBar(
               title: Text(
                 groupName ?? APP_NAME,
                 style: const TextStyle(
@@ -30,11 +29,7 @@ class GroupPage extends ConsumerWidget {
               centerTitle: true,
               elevation: 0,
             )
-          : const PreferredSize(
-              preferredSize: Size.zero,
-              child: SafeArea(
-                child: SizedBox.shrink(),
-              )),
+          ,
       body: FutureBuilder(
           future: ref.read(tARoutesProvider.notifier).openCardBox(),
           builder: ((context, snapshot) {
